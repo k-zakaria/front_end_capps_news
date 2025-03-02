@@ -1,0 +1,130 @@
+<div class="h-screen bg-base-200 flex items-center">
+  <div class="container mx-auto px-2">
+    <div class="flex flex-col lg:flex-row bg-base-100 rounded-box shadow-xl overflow-hidden h-screen lg:h-[90vh]">
+
+      <div class="lg:w-1/2 bg-primary relative hidden lg:block">
+        <img src="assets/images/RecycleHub.PNG" alt="Recycling Hub" class="object-cover w-full h-full"/>
+      </div>
+
+      <div class="lg:w-1/2 p-4 lg:p-6 overflow-y-auto">
+        <div class="max-w-md mx-auto">
+          <h2 class="text-xl font-bold mb-4 text-center lg:text-left">Créez votre compte</h2>
+
+          @if(errorMessage) {
+            <div class="alert alert-error mb-2 p-2 text-sm">
+              <span>{{ errorMessage }}</span>
+            </div>
+          }
+
+          @if(successMessage) {
+            <div class="alert alert-success mb-2 p-2 text-sm">
+              <span>{{ successMessage }}</span>
+            </div>
+          }
+
+          <form #registerForm="ngForm" >
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Prénom</span>
+                </label>
+                <input type="text" name="firstName" ngModel required
+                       class="input input-bordered input-sm w-full" />
+              </div>
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Nom</span>
+                </label>
+                <input type="text" name="lastName" ngModel required
+                       class="input input-bordered input-sm w-full" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Email</span>
+                </label>
+                <input type="email" name="email" ngModel required
+                       class="input input-bordered input-sm w-full" />
+              </div>
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Téléphone</span>
+                </label>
+                <input type="tel" name="phone" ngModel required
+                       class="input input-bordered input-sm w-full" />
+              </div>
+            </div>
+
+            <div>
+              <label class="label py-0">
+                <span class="label-text text-sm">Adresse</span>
+              </label>
+              <input type="text" name="address" ngModel required
+                     class="input input-bordered input-sm w-full" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Ville</span>
+                </label>
+                <input type="text" name="city" ngModel required
+                       class="input input-bordered input-sm w-full" />
+              </div>
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Code Postal</span>
+                </label>
+                <input type="text" name="zipCode" ngModel required
+                       class="input input-bordered input-sm w-full" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Date de naissance</span>
+                </label>
+                <input type="date" name="birthDate" ngModel required
+                       class="input input-bordered input-sm w-full" />
+              </div>
+              <div>
+                <label class="label py-0">
+                  <span class="label-text text-sm">Mot de passe</span>
+                </label>
+                <input type="password" name="password" ngModel required minlength="6"
+                       class="input input-bordered input-sm w-full" />
+              </div>
+            </div>
+
+            <div>
+              <label class="label py-0">
+                <span class="label-text text-sm">Confirmer le mot de passe</span>
+              </label>
+              <input type="password" name="confirmPassword" ngModel required
+                     class="input input-bordered input-sm w-full" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm w-full mt-4"
+                    [disabled]="loading || registerForm.invalid">
+              @if(loading) {
+                <span class="loading loading-spinner loading-xs"></span>
+              }
+              Créer mon compte
+            </button>
+          </form>
+
+          <p class="mt-4 text-center text-xs text-gray-500">
+            Déjà inscrit ?
+            <a routerLink="/auth/login" class="font-semibold text-primary hover:text-primary-focus">
+              Connectez-vous
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
