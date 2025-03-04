@@ -1,64 +1,49 @@
-
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-// import { AuthService } from '../../../services/auth.service';
-
-interface RegisterUser {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-}
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  errorMessage: string = '';
-  successMessage: string = '';
   loading: boolean = false;
+  errorMessage: string = '';
 
-  constructor(
-    // private authService: AuthService,
-    private router: Router
-  ) {}
+  registerForm: FormGroup = new FormGroup({
+    username: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+  });
 
-  // onSubmit(formData: any): void {
-  //   this.loading = true;
-  //   this.errorMessage = '';
-  //   this.successMessage = '';
+  authService = inject(AuthService);
+  router = inject(Router);
 
-  //   if (formData.password !== formData.confirmPassword) {
-  //     this.errorMessage = 'Les mots de passe ne correspondent pas';
-  //     this.loading = false;
-  //     return;
-  //   }
+  onSubmit() {
+    this.errorMessage = '';
+    if (this.registerForm.invalid) {
+      console.error('Form is invalid');
+      return;
+    }
 
-  //   const newUser = {
-  //     ...formData,
-  //     role: 'PARTICULIER'
-  //   };
+    const { username, email, password } = this.registerForm.value;
+    console.log('Sending register request:', { username, email, password });
+    this.loading = true;
 
-  //   this.authService.register(newUser).subscribe({
-  //     next: () => {
-  //       this.loading = false;
-  //       this.successMessage = 'Inscription réussie ! Redirection...';
-  //       setTimeout(() => {
-  //         this.router.navigate(['/auth/login']);
-  //       }, 2000);
-  //     },
-  //     error: (error) => {
-  //       this.loading = false;
-  //       this.errorMessage = error.message || 'Une erreur est survenue lors de l\'inscription';
-  //     }
-  //   });
-  // }
+    this.authService.register(username, email, password).subscribe({
+      next: () => {
+        this.loading = false;
+        this.router.navigate(['/']);
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'Registration failed. Please try again.';
+      },
+    });
+  }
 }

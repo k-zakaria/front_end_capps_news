@@ -1,83 +1,87 @@
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-// import { Observable, throwError } from 'rxjs';
-// import { map, catchError } from 'rxjs/operators';
-// import { Router } from '@angular/router';
-
-// interface User {
-//   id?: number;
-//   username: string;
-//   email: string;
-//   password: string;
-//   role: string;
-// }
-
-// interface Credentials {
-//   username: string;
-//   password: string;
-// }
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class AuthService {
-//   private apiUrl = 'http://localhost:8081/api/auth';
-
-//   constructor(
-//     private http: HttpClient,
-//     private router: Router
-//   ){ }
+import { inject, Injectable, signal } from '@angular/core';
+import { omit } from 'lodash';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { AuthUser, UserLogin } from '../model/UserLogin';
 
 
-//   getToken(): string | null {
-//     const user = this.getCurrentUser();
-//     if (user && user.id) {
-//       return user.id.toString();
-//     }
-//     return null;
-//   }
 
-//   login(credentials: Credentials): Observable<User> {
-//     return this.http.get<User[]>(`${this.apiUrl}/login?username=${credentials.username}`).pipe(
-//       map((users: User[]) => {
-//         const user = users.find(u => u.username === credentials.username && u.password === credentials.password);
-//         if (user) {
-//           localStorage.setItem('currentUser', JSON.stringify(user));
-//           return user;
-//         }
-//         throw new Error('Invalid credentials');
-//       }),
-//       catchError(this.handleError)
-//     );
-//   }
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private http = inject(HttpClient);
+  private readonly urlApi = 'http://localhost:8081/api/auth/login';
+  private readonly registerUrl = 'http://localhost:8081/api/auth/register';
+  private router = inject(Router);
 
-//   register(user: User): Observable<User> {
-//     return this.http.post<User>(`${this.apiUrl}/register`, user).pipe(
-//       catchError(this.handleError)
-//     );
-//   }
 
-//   logout(): void {
-//     localStorage.removeItem('currentUser');
-//     this.router.navigate(['/auth/login']);
-//   }
+  accessToken = signal<string | null>(null);
+  user = signal<AuthUser | null>(null);
 
-//   getCurrentUser(): User | null {
-//     const user = localStorage.getItem('currentUser');
-//     return user ? JSON.parse(user) : null;
-//   }
+  constructor() {
+    this.loadUserTokenLocalStorage();
+  }
 
-//   isLoggedIn(): boolean {
-//     return !!this.getCurrentUser();
-//   }
+  loadUserTokenLocalStorage() {
+    const storedUser = localStorage.getItem('user');
+    const storedAccessToken = localStorage.getItem('accessToken');
+    if (storedAccessToken && storedUser) {
+      this.user.set(JSON.parse(storedUser));
+      this.accessToken.set(storedAccessToken);
+    }
+  }
 
-//   private handleError(error: HttpErrorResponse) {
-//     let errorMessage = 'Une erreur est survenue';
-//     if (error.error instanceof ErrorEvent) {
-//       errorMessage = `Erreur: ${error.error.message}`;
-//     } else {
-//       errorMessage = `Code d'erreur: ${error.status}, Message: ${error.message}`;
-//     }
-//     return throwError(() => new Error(errorMessage));
-//   }
-// }
+  login(username: string, password: string): Observable<UserLogin> {
+    return this.http.post<UserLogin>(this.urlApi, { username, password }).pipe(
+      tap((res) => {
+        this.setUser(res);
+        this.setAccessToken(res);
+      }),
+    );
+  }
+
+  //register
+  register(username: string, email: string, password: string): Observable<UserLogin> {
+    return this.http.post<UserLogin>(this.registerUrl, { username, email, password }).pipe(
+      tap((res) => {
+        this.setUser(res);
+        this.setAccessToken(res);
+      }),
+    );
+  }
+
+  setUser(res: UserLogin) {
+    localStorage.setItem('user', JSON.stringify(omit(res, ['accessToken'])));
+    this.user.set(omit(res, ['accessToken']));
+  }
+  setAccessToken(res: UserLogin) {
+    localStorage.setItem('accessToken', res.accessToken);
+    this.accessToken.set(res.accessToken);
+  }
+
+  getUser(): AuthUser | null {
+    return this.user();
+  }
+
+  getAccessToken(): string | null {
+    return this.accessToken();
+  }
+
+  isUserLoginenticated() {
+    const token = this.getAccessToken();
+    console.log('Token:', token);
+    return !!token;
+  }
+
+
+  logout() {
+    this.accessToken.set(null);
+    this.user.set(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    this.router.navigate(['/auth/login']);
+  }
+}
