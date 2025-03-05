@@ -7,6 +7,8 @@ import { BusinessComponent } from './pages/business/business.component';
 import { InnovationComponent } from './pages/innovation/innovation.component';
 import { CultureComponent } from './pages/culture/culture.component';
 import { ArtsComponent } from './pages/arts/arts.component';
+import { TravelComponent } from './pages/travel/travel.component';
+import { EarthComponent } from './pages/earth/earth.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +34,14 @@ export const routes: Routes = [
     {
         path: 'arts',
         component: ArtsComponent,
+    },
+    {
+        path: 'travel',
+        component: TravelComponent,
+    },
+    {
+        path: 'earth',
+        component: EarthComponent,
     },
     {
         path: 'auth',
