@@ -4,6 +4,7 @@ import { RegisterComponent } from './pages/auth/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SportComponent } from './pages/sport/sport.component';
 import { BusinessComponent } from './pages/business/business.component';
+import { InnovationComponent } from './pages/innovation/innovation.component';
 
 export const routes: Routes = [
     {
@@ -17,6 +18,10 @@ export const routes: Routes = [
     {
         path: 'business',
         component: BusinessComponent,
+    },
+    {
+        path: 'innovation',
+        component: InnovationComponent,
     },
     {
         path: 'auth',
