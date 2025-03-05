@@ -6,6 +6,7 @@ import { SportComponent } from './pages/sport/sport.component';
 import { BusinessComponent } from './pages/business/business.component';
 import { InnovationComponent } from './pages/innovation/innovation.component';
 import { CultureComponent } from './pages/culture/culture.component';
+import { ArtsComponent } from './pages/arts/arts.component';
 
 export const routes: Routes = [
     {
@@ -27,6 +28,10 @@ export const routes: Routes = [
     {
         path: 'culture',
         component: CultureComponent,
+    },
+    {
+        path: 'arts',
+        component: ArtsComponent,
     },
     {
         path: 'auth',
