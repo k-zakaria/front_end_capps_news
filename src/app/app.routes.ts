@@ -9,11 +9,16 @@ import { CultureComponent } from './pages/culture/culture.component';
 import { ArtsComponent } from './pages/arts/arts.component';
 import { TravelComponent } from './pages/travel/travel.component';
 import { EarthComponent } from './pages/earth/earth.component';
+import { NewsComponent } from './pages/news/news.component';
 
 export const routes: Routes = [
     {
         path: '',
         component: HomeComponent,
+    },
+    {
+        path: 'news',
+        component: NewsComponent,
     },
     {
         path: 'sport',
