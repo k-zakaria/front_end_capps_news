@@ -1,9 +1,9 @@
 <div id="home">
     <div class="w-70 flex justify-center">
-        <div class="font-sans bg-white">
-            <div *ngFor="let article of articles" class="grid grid-cols-4 gap-4">
-                <div class="hover:opacity-95 transition-all duration-200 transform hover:-translate-y-1">
-                    <img [src]="article.imageUrl || 'https://via.placeholder.com/300'" alt="{{ article.title }}"
+        <div  class="font-sans bg-white">
+            <div class="grid grid-cols-4 gap-4">
+                <div *ngFor="let article of articles" class="hover:opacity-95 transition-all duration-200 transform hover:-translate-y-1">
+                    <img [src]="article.image || 'https://via.placeholder.com/300'" alt="{{ article.title }}"
                         class="w-full h-32 object-cover mb-2" />
                     <h3 class="font-bold hover:text-blue-700 transition-colors duration-200 cursor-pointer">
                         {{ article.title }}

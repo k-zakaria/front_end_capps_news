@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ArticleResVM } from '../model/article-res-vm';
+import { ArticleReqVM, ArticleResVM } from '../model/article-res-vm';
+import { CategoryResVM } from '../model/category-res-vm';
+import { TagResVM } from '../model/tag-res-vm';
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +35,27 @@ export class ArticleService {
   // Get the latest article
   getLatestArticle(): Observable<ArticleResVM> {
     return this.http.get<ArticleResVM>(`${this.apiUrl}/article/latest`);
+  }
+
+  // Méthode pour récupérer tous les tags
+  getAllTags(): Observable<TagResVM[]> {
+    return this.http.get<TagResVM[]>(`${this.apiUrl}/tags`);
+  }
+
+  // Méthode pour récupérer toutes les catégories
+  getAllCategories(): Observable<CategoryResVM[]> {
+    return this.http.get<CategoryResVM[]>(`${this.apiUrl}/categories`);
+  }
+
+  // Méthode pour créer un article (déjà implémentée)
+  createArticle(article: ArticleReqVM, image: File): Observable<ArticleResVM> {
+    const formData = new FormData();
+    formData.append('article', JSON.stringify(article));
+    formData.append('image', image);
+
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/json');
+
+    return this.http.post<ArticleResVM>(`${this.apiUrl}/article`, formData, { headers });
   }
 }

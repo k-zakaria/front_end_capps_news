@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CardsHomeComponent } from '../../components/home/cards-home/cards-home.component';
 import { LastCardsComponent } from "../../components/home/last-cards/last-cards.component";
-import { ArticleResVM } from '../../model/article-res-vm';
+import {  ArticleResVM } from '../../model/article-res-vm';
 import { ArticleService } from '../../services/article.service';
 import { CommonModule, DatePipe } from '@angular/common';
 

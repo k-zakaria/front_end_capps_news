@@ -1,11 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ArticleService } from '../../../services/article.service';
+import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-last-cards-innovation',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './last-cards-innovation.component.html',
   styleUrl: './last-cards-innovation.component.css'
 })
-export class LastCardsInnovationComponent {
+export class LastCardsInnovationComponent implements OnInit {
+  articles: any[] = [];
+  loading = true;
+  categoryId: number | null = null;
 
+  constructor(
+    private route: ActivatedRoute,
+    private articleService: ArticleService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.categoryId = +params.get('categoryId')!;
+      this.fetchArticlesByCategory(this.categoryId);
+    });
+  }
+
+  fetchArticlesByCategory(categoryId: number): void {
+    this.articleService.getArticlesByCategoryId(categoryId).subscribe({
+      next: (articles) => {
+        this.articles = articles;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch articles:', err);
+        this.loading = false;
+      },
+    });
+  }
 }

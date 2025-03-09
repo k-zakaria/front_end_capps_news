@@ -1,0 +1,10 @@
+/* Hide text labels when sidebar is collapsed */
+#sidebar.w-16 nav ul li a span {
+    display: none;
+  }
+  
+  /* Adjust padding for collapsed state */
+  #sidebar.w-16 nav ul li {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }

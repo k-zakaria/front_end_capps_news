@@ -10,44 +10,66 @@ import { ArtsComponent } from './pages/arts/arts.component';
 import { TravelComponent } from './pages/travel/travel.component';
 import { EarthComponent } from './pages/earth/earth.component';
 import { NewsComponent } from './pages/news/news.component';
+import { VesitorComponent } from './layouts/vesitor/vesitor.component';
+import { DashbordsComponent } from './layouts/dashbords/dashbords.component';
+import { ArticleComponent } from './pages/news-dashboard/article/article.component';
 
 export const routes: Routes = [
+
     {
-        path: '',
-        component: HomeComponent,
+        path : 'dashboard',
+        component : DashbordsComponent,
+        children : [
+            {
+                path: 'article',
+                component: ArticleComponent,
+            },
+        ]
     },
-    {
-        path: 'news',
-        component: NewsComponent,
-    },
-    {
-        path: 'sport',
-        component: SportComponent,
-    },
-    {
-        path: 'business',
-        component: BusinessComponent,
-    },
-    {
-        path: 'innovation',
-        component: InnovationComponent,
-    },
-    {
-        path: 'culture',
-        component: CultureComponent,
-    },
-    {
-        path: 'arts',
-        component: ArtsComponent,
-    },
-    {
-        path: 'travel',
-        component: TravelComponent,
-    },
-    {
-        path: 'earth',
-        component: EarthComponent,
-    },
+    
+   {
+    path : 'vesitor' , 
+    component : VesitorComponent , 
+    children : [
+        {
+            path: '',
+            component: HomeComponent,
+        },
+        {
+            path: 'news/:categoryId',
+            component: NewsComponent,
+        },
+        {
+            path: 'sport/:categoryId',
+            component: SportComponent,
+        },
+        {
+            path: 'business/:categoryId',
+            component: BusinessComponent,
+        },
+        {
+            path: 'innovation/:categoryId',
+            component: InnovationComponent,
+        },
+        {
+            path: 'culture/:categoryId',
+            component: CultureComponent,
+        },
+        {
+            path: 'arts/:categoryId',
+            component: ArtsComponent,
+        },
+        {
+            path: 'travel/:categoryId',
+            component: TravelComponent,
+        },
+        {
+            path: 'earth/:categoryId',
+            component: EarthComponent,
+        },
+        
+    ]
+   },
     {
         path: 'auth',
         children: [

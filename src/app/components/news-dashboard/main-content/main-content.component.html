@@ -1,0 +1,79 @@
+<div class="p-6">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-2xl font-semibold">Integrations</h1>
+        <nav class="text-sm text-gray-500">
+          <a href="#" class="hover:text-gray-700">Home</a> > <a href="#" class="hover:text-gray-700">My App</a> > <span class="text-gray-700">Integrations</span>
+        </nav>
+      </div>
+      <button class="bg-blue-500 text-white px-4 py-2 rounded-lg" (click)="openModal()">Add article</button>
+    </div>
+  
+    <!-- Integration Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let integration of integrations" class="bg-white p-6 rounded-lg shadow-md">
+        <div class="flex justify-between items-center">
+          <img [src]="integration.logo" [alt]="integration.name + ' Logo'" class="h-8">
+          <button class="text-gray-600 hover:text-gray-900">
+            <!-- Inline SVG for Settings Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+        <h2 class="mt-4 text-lg font-semibold">{{ integration.name }}</h2>
+        <p class="mt-2 text-sm text-gray-600">{{ integration.description }}</p>
+        <div class="mt-4 flex space-x-2">
+          <button class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg">Remove</button>
+          <button class="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg">Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md p-6">
+      <h2 class="text-xl font-semibold mb-4 dark:text-white">Add Article</h2>
+      <form>
+        <div class="mb-4">
+          <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+          <input type="text" id="title" name="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+        </div>
+        <div class="mb-4">
+          <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Content</label>
+          <textarea id="content" name="content" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="categoryId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+          <select id="categoryId" name="categoryId" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+            <option>Category</option>
+          </select>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tags</label>
+            <div class="mt-1">
+              <!-- Liste des tags disponibles -->
+              <div *ngFor="let tag of availableTags" class="flex items-center">
+                <input
+                  type="checkbox"
+                  [id]="'tag-' + tag"
+                  [value]="tag"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
+                />
+                <label [for]="'tag-' + tag" class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ tag }}</label>
+              </div>
+            </div>
+          </div>
+        <div class="mb-4">
+            <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image (Optional)</label>
+            <input type="file" id="image" name="image" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" (click)="closeModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
