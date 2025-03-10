@@ -3,6 +3,7 @@ export interface UserLogin {
   username: string,
   email: string,
   cni: string,
+  role: string
 }
 
 export interface AuthUser {

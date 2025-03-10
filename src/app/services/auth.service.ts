@@ -69,6 +69,10 @@ export class AuthService {
   getAccessToken(): string | null {
     return this.accessToken();
   }
+  getCurrentUser(): UserLogin | null {
+    const user = localStorage.getItem('currentUser');
+    return user ? JSON.parse(user) : null;
+  }
 
   isUserLoginenticated() {
     const token = this.getAccessToken();

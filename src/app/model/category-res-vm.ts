@@ -1,4 +1,10 @@
 export interface CategoryResVM {
-    id: number; // Identifiant de la catégorie
-    name: string; // Nom de la catégorie
+    id: number; 
+    name: string; 
+    description: string;
+  }
+
+  export interface CategoryFormData {
+    name: string;
+    description: string;
   }
