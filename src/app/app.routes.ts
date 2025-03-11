@@ -16,6 +16,7 @@ import { ArticleComponent } from './pages/news-dashboard/article/article.compone
 import { CategoryComponent } from './pages/news-dashboard/category/category.component';
 import { authGuard } from './guards/auth.guard';
 import { TagComponent } from './pages/news-dashboard/tag/tag.component';
+import { UserComponent } from './pages/news-dashboard/user/user.component';
 
 export const routes: Routes = [
 
@@ -37,7 +38,12 @@ export const routes: Routes = [
                 path: 'tags',
                 component: TagComponent,
                 canActivate: [authGuard],
-            }
+            },
+            {
+                path: 'users',
+                component: UserComponent,
+                canActivate: [authGuard],
+              }
         ]
     },
 

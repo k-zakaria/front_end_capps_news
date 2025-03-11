@@ -158,15 +158,5 @@ export class CategoryContentComponent implements OnInit{
       });
     }
   }
-  
-
-  // openModal() {
-  //   this.isModalOpen = true;
-  // }
-
-  // // Méthode pour fermer la modale
-  // closeModal() {
-  //   this.isModalOpen = false;
-  // }
 
 }

@@ -9,3 +9,21 @@ export interface UserLogin {
 export interface AuthUser {
   username: string,
 }
+
+export interface UserResVM {
+  id?: number;
+  username: string;
+  email: string;
+  password?: string;
+  role?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// src/app/model/user-form-data.ts
+export interface UserFormData {
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+}
