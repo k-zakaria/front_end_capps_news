@@ -1,139 +1,109 @@
+<!-- src/app/components/latest-articles/latest-articles.component.html -->
 <div id="webcrumbs">
     <div class="bg-white border-t border-b border-gray-200">
-        <h2 class="text-xl font-bold px-4 py-2 border-b border-gray-200">More to explore</h2>
-        <div class="flex flex-col space-y-4 p-4">
-            <div class="flex space-x-4">
-                <div class="w-1/2 flex flex-col space-y-2 group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                            alt="Myanmar villagers"
-                            class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
-                    <h3 class="text-xl font-bold hover:text-gray-700 transition-colors">
-                        Myanmar villagers reveal &#x27;desperate&#x27; illegal kidney sales
-                    </h3>
-                    <p class="text-sm text-gray-600">
-                        Two Burmese men tell the BBC they used forged documents and middlemen to undergo surgery
-                        in India.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-500">
-                        <span>19 hrs ago</span> <span class="mx-2">|</span> <span>Asia</span>
-                    </div>
-                </div>
-                <div class="w-1/2 flex flex-col space-y-2 group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                            alt="Triple killer"
-                            class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
-                    <h3 class="text-xl font-bold hover:text-gray-700 transition-colors">
-                        The disturbing internet history of a triple killer
-                    </h3>
-                    <p class="text-sm text-gray-600">
-                        Websites visited and videos posted by Nicholas Prosper show some alarming obsessions.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-500">
-                        <span>1 day ago</span> <span class="mx-2">|</span> <span>Beds, Herts &amp; Bucks</span>
-                    </div>
-                </div>
-            </div>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="flex flex-col space-y-2 group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                            alt="Liberal hopefuls"
-                            class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
-                    <h3 class="font-bold hover:text-gray-700 transition-colors">
-                        Canada&#x27;s Liberal hopefuls talk Trump and carbon tax
-                    </h3>
-                    <p class="text-xs text-gray-600">
-                        The Liberal Party of Canada will soon choose a leader that will replace Justin Trudeau
-                        and become Canada&#x27;s next prime minister.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-500">
-                        <span>1 day ago</span> <span class="mx-2">|</span> <span>US &amp; Canada</span>
-                    </div>
-                </div>
-                <div class="flex flex-col space-y-2 group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                            alt="Ukraine minerals"
-                            class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
-                    <h3 class="font-bold hover:text-gray-700 transition-colors">
-                        Why is Ukraine negotiating a minerals deal with the US?
-                    </h3>
-                    <p class="text-xs text-gray-600">
-                        A minister says nearly all key details have been finalised for a deal giving the US
-                        access to the country&#x27;s minerals.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-500">
-                        <span>1 day ago</span> <span class="mx-2">|</span> <span>Business</span>
-                    </div>
-                </div>
-                <div class="flex flex-col space-y-2 group">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                            alt="PM defense hike"
-                            class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
-                    <h3 class="font-bold hover:text-gray-700 transition-colors">
-                        Will British PM&#x27;s defence hike win over US president?
-                    </h3>
-                    <p class="text-xs text-gray-600">
-                        Prime Minister Sir Keir Starmer has set out plans to increase defence spending to 2.5%
-                        of national income by 2027.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-500">
-                        <span>2 days ago</span> <span class="mx-2">|</span> <span>Politics</span>
-                    </div>
-                </div>
-            </div>
-            <div class="group">
-                <div class="flex space-x-4">
-                    <div class="w-1/3 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1576484583542-7012a537abd8?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                            alt="Congo jailbreak"
-                            class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
-                    <div class="w-2/3 flex flex-col space-y-2">
-                        <h3 class="font-bold hover:text-gray-700 transition-colors">
-                            &#x27;They took all the women here&#x27;: Rape survivors recall horror of DR Congo
-                            jailbreak
-                        </h3>
-                        <p class="text-xs text-gray-600">
-                            Women recall being raped in prison in DR Congo, as chaos broke out after rebels
-                            advanced on Goma city.
-                        </p>
-                        <div class="flex items-center text-xs text-gray-500">
-                            <span>24 hrs ago</span> <span class="mx-2">|</span> <span>Africa</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="group">
-                <div class="flex space-x-4">
-                    <div class="w-1/3 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1584552500368-9f393dec1395?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                            alt="Syria Kurds"
-                            class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
-                    <div class="w-2/3 flex flex-col space-y-2">
-                        <h3 class="font-bold hover:text-gray-700 transition-colors">
-                            &#x27;We are still at war&#x27;: Syria&#x27;s Kurds battle Turkey months after
-                            Assad&#x27;s fall
-                        </h3>
-                        <p class="text-xs text-gray-600">
-                            As Syria&#x27;s interim leader plans its future, Kurds in the north-east are
-                            battling Turkish-backed forces.
-                        </p>
-                        <div class="flex items-center text-xs text-gray-500">
-                            <span>16 hrs ago</span> <span class="mx-2">|</span> <span>Middle East</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <h2 class="text-xl font-bold px-4 py-2 border-b border-gray-200">More to explore</h2>
+  
+      <!-- Loading indicator -->
+      @if (loading) {
+        <div class="flex justify-center items-center p-12">
+          <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
         </div>
+      }
+  
+      <!-- Error message -->
+      @if (errorMessage) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 m-4 rounded">
+          {{ errorMessage }}
+        </div>
+      }
+  
+      <!-- Articles content -->
+      @if (!loading && !errorMessage) {
+        <div class="flex flex-col space-y-4 p-4">
+          <!-- Featured articles (top row with 2 articles) -->
+          <div class="flex space-x-4">
+            @for (article of featuredArticles; track article.id) {
+              <div class="w-1/2 flex flex-col space-y-2 group cursor-pointer" (click)="navigateToArticle(article.id)">
+                <div class="relative overflow-hidden">
+                    <img [src]="article.image || 'https://via.placeholder.com/300'"
+                    [alt]="article.title"
+                    class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" 
+                  />
+                </div>
+                <h3 class="text-xl font-bold hover:text-gray-700 transition-colors">
+                  {{ article.title }}
+                </h3>
+                <p class="text-sm text-gray-600">
+                  {{ article.description }}
+                </p>
+                <div class="flex items-center text-xs text-gray-500">
+                  <span>{{ getTimeAgo(article.publicationDate) }}</span> 
+                  <span class="mx-2">|</span> 
+                  <span>{{ article.category?.name || 'News' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+  
+          <!-- Secondary articles (grid of 3) -->
+          <div class="grid grid-cols-3 gap-4">
+            @for (article of secondaryArticles; track article.id) {
+              <div class="flex flex-col space-y-2 group cursor-pointer" (click)="navigateToArticle(article.id)">
+                <div class="relative overflow-hidden">
+                    <img [src]="article.image || 'https://via.placeholder.com/300'"
+                    [alt]="article.title"
+                    class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" 
+                  />
+                </div>
+                <h3 class="font-bold hover:text-gray-700 transition-colors">
+                  {{ article.title }}
+                </h3>
+                <p class="text-xs text-gray-600">
+                  {{ article.description }}
+                </p>
+                <div class="flex items-center text-xs text-gray-500">
+                  <span>{{ getTimeAgo(article.publicationDate) }}</span> 
+                  <span class="mx-2">|</span> 
+                  <span>{{ article.category?.name || 'News' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+  
+          <!-- Other articles (side by side with image on left/right) -->
+          @for (article of otherArticles; track article.id; let i = $index) {
+            <div class="group cursor-pointer" (click)="navigateToArticle(article.id)">
+              <div class="flex space-x-4">
+                <div class="w-1/3 relative overflow-hidden">
+                    <img [src]="article.image || 'https://via.placeholder.com/300'"
+                    [alt]="article.title"
+                    class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" 
+                  />
+                </div>
+                <div class="w-2/3 flex flex-col space-y-2">
+                  <h3 class="font-bold hover:text-gray-700 transition-colors">
+                    {{ article.title }}
+                  </h3>
+                  <p class="text-xs text-gray-600">
+                    {{ article.description }}
+                  </p>
+                  <div class="flex items-center text-xs text-gray-500">
+                    <span>{{ getTimeAgo(article.publicationDate) }}</span> 
+                    <span class="mx-2">|</span> 
+                    <span>{{ article.category?.name || 'News' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+  
+          <!-- Placeholder message if not enough articles -->
+          @if (featuredArticles.length === 0 && secondaryArticles.length === 0 && otherArticles.length === 0) {
+            <div class="text-center py-8 text-gray-500">
+              No published articles found. Check back later for updates.
+            </div>
+          }
+        </div>
+      }
     </div>
-</div>
+  </div>

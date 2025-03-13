@@ -27,3 +27,8 @@ export interface UserFormData {
   password: string;
   role: string;
 }
+
+// src/app/model/user-role-update.ts
+export interface UserRoleUpdate {
+  role: string;
+}

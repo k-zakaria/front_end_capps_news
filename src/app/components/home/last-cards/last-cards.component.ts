@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ArticleResVM } from '../../../model/article-res-vm';
 import { ArticleService } from '../../../services/article.service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-last-cards',
@@ -14,7 +15,7 @@ export class LastCardsComponent implements OnInit {
   latestArticle: ArticleResVM | null = null;
   loading = true;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService, private router: Router,) {}
 
   ngOnInit(): void {
     this.fetchAllArticles();
@@ -32,5 +33,9 @@ export class LastCardsComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  navigateToArticleDetail(articleId: string): void {
+    this.router.navigate(['/vesitor/article', articleId]);
   }
 }

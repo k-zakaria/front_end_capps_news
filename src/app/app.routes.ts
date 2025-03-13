@@ -17,6 +17,8 @@ import { CategoryComponent } from './pages/news-dashboard/category/category.comp
 import { authGuard } from './guards/auth.guard';
 import { TagComponent } from './pages/news-dashboard/tag/tag.component';
 import { UserComponent } from './pages/news-dashboard/user/user.component';
+import { AuthorAuthorComponent } from './pages/news-dashboard/author-author/author-author.component';
+import { ArticleDetailComponent } from './components/article-detail/article-detail.component';
 
 export const routes: Routes = [
 
@@ -43,7 +45,12 @@ export const routes: Routes = [
                 path: 'users',
                 component: UserComponent,
                 canActivate: [authGuard],
-              }
+            },
+            {
+                path: 'author/articles',
+                component: AuthorAuthorComponent,
+                canActivate: [authGuard],
+            }
         ]
     },
 
@@ -87,6 +94,10 @@ export const routes: Routes = [
                 path: 'earth/:categoryId',
                 component: EarthComponent,
             },
+            {
+                path: 'article/:id',
+                component: ArticleDetailComponent
+            }
 
         ]
     },

@@ -1,18 +1,58 @@
-export interface ArticleResVM {
-    id: string;
-    title: string;
-    content: string;
-    categoryId: number;
-    tagIds: number[];
-    createdAt: string;
-    userId: number;
-    image?: string; 
-  }
+// export interface ArticleResVM {
+//     id: string;
+//     title: string;
+//     content: string;
+//     categoryId: number;
+//     tagIds: number[];
+//     createdAt: string;
+//     userId: number;
+//     image?: string; 
+//   }
 
-  export interface ArticleReqVM {
-  title: string; // Titre de l'article
-  content: string; // Contenu de l'article
-  categoryId: number; // Identifiant de la catégorie
-  tagIds: number[]; // Liste des identifiants des tags associés à l'article
-  userId: number; // Identifiant de l'utilisateur qui crée l'article
+//   export interface ArticleReqVM {
+//   title: string; // Titre de l'article
+//   content: string; // Contenu de l'article
+//   categoryId: number; // Identifiant de la catégorie
+//   tagIds: number[]; // Liste des identifiants des tags associés à l'article
+//   userId: number; // Identifiant de l'utilisateur qui crée l'article
+// }
+
+// src/app/model/article-res-vm.ts
+export interface UserSummaryDTO {
+  id: string;
+  username: string;
+}
+
+export interface CategorySummaryDTO {
+  id: number;
+  name: string;
+}
+
+export interface TagSummaryDTO {
+  id: number;
+  name: string;
+}
+
+export interface ArticleResVM {
+  id: string;  // UUID
+  title: string;
+  description: string;
+  content: string;
+  image: string | null; // Changez pour permettre explicitement null
+  published: boolean;
+  publicationDate: string | null | undefined; // Date ISO au format string, nullable
+  author: UserSummaryDTO | null;
+  category: CategorySummaryDTO | null;
+  tags: TagSummaryDTO[];
+}
+
+// src/app/model/article-req-vm.ts
+export interface ArticleReqVM {
+  title: string;
+  description: string;
+  content: string;
+  image: string;
+  tagIds: number[];
+  categoryId: number;
+  published?: boolean;
 }

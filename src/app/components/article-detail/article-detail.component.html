@@ -1,0 +1,89 @@
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Navigation links -->
+    <div class="mb-6 text-sm">
+        <a (click)="goBack()" class="text-blue-600 hover:underline cursor-pointer">← Back to articles</a>
+    </div>
+
+    <!-- Loading state -->
+    @if (loading) {
+    <div class="flex justify-center items-center my-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+    </div>
+    }
+
+    <!-- Error message -->
+    @if (errorMessage) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+        <span class="block sm:inline">{{ errorMessage }}</span>
+    </div>
+    }
+
+    <!-- Article content -->
+    @if (!loading && article) {
+    <article>
+        <!-- Category & Tags -->
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+            @if (article.category) {
+            <a href="#" class="text-blue-600 font-medium hover:underline">{{ article.category.name }}</a>
+            }
+            <span class="text-gray-500">|</span>
+            @for (tag of article.tags; track tag.id) {
+            <span class="bg-gray-100 px-2 py-1 rounded-full text-xs font-medium">{{ tag.name }}</span>
+            }
+        </div>
+
+        <!-- Article title -->
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{{ article.title }}</h1>
+
+        <!-- Article description -->
+        <p class="text-xl text-gray-700 mb-6 font-light leading-relaxed">{{ article.description }}</p>
+
+        <!-- Publication details -->
+        <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
+            <div class="flex items-center">
+                <div class="text-sm text-gray-600">
+                    <div class="font-medium">By {{ article.author?.username || 'Unknown author' }}</div>
+                    <div [class]="article.published ? 'published-class' : 'unpublished-class'"></div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <!-- Social sharing icons -->
+                <button class="p-2 rounded-full hover:bg-gray-100">
+                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                    </svg>
+                </button>
+                <button class="p-2 rounded-full hover:bg-gray-100">
+                    <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.058 10.058 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Featured image -->
+        @if (article.image) {
+        <div class="mb-8">
+            <img [src]="article.image" [alt]="article.title" class="w-full h-auto rounded-lg">
+        </div>
+        }
+
+        <!-- Article content -->
+        <div class="prose max-w-none prose-lg mb-10">
+            <div [innerHTML]="article.content | formatContent"></div>
+        </div>
+
+        <!-- Tags and navigation -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+            <h3 class="text-sm font-medium mb-2">Related Topics</h3>
+            <div class="flex flex-wrap gap-2">
+                @for (tag of article.tags; track tag.id) {
+                <a href="#" class="bg-gray-100 hover:bg-gray-200 transition-colors px-3 py-1 rounded-full text-sm">{{ tag.name }}</a>
+                }
+            </div>
+        </div>
+    </article>
+    }
+</div>

@@ -1,0 +1,28 @@
+/* src/app/components/author/author-articles/author-articles.component.css */
+.article-card {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .status-badge-published {
+    background-color: #d1fae5;
+    color: #047857;
+  }
+  
+  .status-badge-draft {
+    background-color: #fef3c7;
+    color: #92400e;
+  }

@@ -24,6 +24,22 @@ html {
   tab-size: 4;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* src/app/components/latest-articles/latest-articles.component.css */
+/* Vous pouvez conserver les styles que vous avez déjà définis dans cards-home.component.css */
+
+.group {
+  transition: all 0.3s ease;
+}
+
+.group:hover {
+  transform: translateY(-2px);
+}
+
+.group:hover h3 {
+  color: #4F46E5;
+}
+
 body {
   line-height: inherit;
   margin: 0;

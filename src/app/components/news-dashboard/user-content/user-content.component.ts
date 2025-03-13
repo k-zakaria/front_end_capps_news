@@ -25,10 +25,12 @@ export class UserContentComponent implements OnInit {
     role: 'USER'
   };
 
-  roles: string[] = ['USER', 'ADMIN', 'MODERATOR'];
+  roles: string[] = ['USER', 'ADMIN', 'AUTHOR'];
   errorMessage: string = '';
   successMessage: string = '';
   hidePassword: boolean = true;
+  isRoleModalOpen: boolean = false;
+  selectedRole: string = '';
 
   constructor(private userService: UserService) { }
 
@@ -70,9 +72,23 @@ export class UserContentComponent implements OnInit {
     this.isModalOpen = true;
   }
 
+  openRoleUpdateModal(user: UserResVM): void {
+    this.selectedUserId = user.id !== undefined ? user.id : null;
+    this.selectedRole = user.role || 'USER';
+    this.isRoleModalOpen = true;
+  }
+
   closeModal(): void {
     this.isModalOpen = false;
     this.resetForm();
+  }
+
+  closeRoleModal(): void {
+    this.isRoleModalOpen = false;
+    this.selectedUserId = null;
+    this.selectedRole = '';
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 
   resetForm(): void {
@@ -120,21 +136,20 @@ export class UserContentComponent implements OnInit {
 
   updateUser(): void {
     if (!this.selectedUserId) return;
-    
+
     this.loading = true;
     this.errorMessage = '';
-    
-    // Créez la variable userData
+
     let dataToSend: any;
-    
+
     // Si le mot de passe est vide lors de l'édition, on crée un objet sans cette propriété
     if (this.editMode && !this.userForm.password) {
       const { password, ...rest } = this.userForm;
       dataToSend = rest;
     } else {
-      dataToSend = {...this.userForm};
+      dataToSend = { ...this.userForm };
     }
-    
+
     this.userService.updateUser(this.selectedUserId, dataToSend).subscribe({
       next: (updatedUser) => {
         // Mettre à jour l'utilisateur dans le tableau local
@@ -142,10 +157,10 @@ export class UserContentComponent implements OnInit {
         if (index !== -1) {
           this.users[index] = updatedUser;
         }
-        
+
         this.successMessage = 'User updated successfully!';
         this.loading = false;
-        
+
         // Fermer la modale après un délai
         setTimeout(() => {
           this.closeModal();
@@ -160,16 +175,48 @@ export class UserContentComponent implements OnInit {
     });
   }
 
+  updateUserRole(): void {
+    if (!this.selectedUserId || !this.selectedRole) {
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.userService.updateUserRole(this.selectedUserId, this.selectedRole).subscribe({
+      next: (updatedUser) => {
+        // Mettre à jour l'utilisateur dans le tableau local
+        const index = this.users.findIndex(u => u.id === this.selectedUserId);
+        if (index !== -1) {
+          this.users[index] = updatedUser;
+        }
+
+        this.successMessage = 'User role updated successfully!';
+        this.loading = false;
+
+        // Fermer la modale après un délai
+        setTimeout(() => {
+          this.closeRoleModal();
+        }, 1500);
+      },
+      error: (err) => {
+        console.error('Failed to update user role:', err);
+        this.errorMessage = 'Failed to update user role. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
+
 
   deleteUser(userId: number | undefined): void {
     if (userId === undefined) {
       this.errorMessage = 'Cannot delete user with undefined ID';
       return;
     }
-    
+
     if (confirm('Are you sure you want to delete this user?')) {
       this.loading = true;
-      
+
       this.userService.deleteUser(userId).subscribe({
         next: () => {
           // Supprimer l'utilisateur du tableau local
