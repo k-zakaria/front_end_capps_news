@@ -1,68 +1,83 @@
-
-        <div id="webcrumbs">
-            <div class="w-[1024px] font-sans">
-                <div class="grid grid-cols-3 gap-6">
-                    <div class="col-span-2">
-                        <div
-                            class="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-                        >
-                            <img
-                                src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                                alt="Football player celebrating"
-                                class="w-full h-[240px] object-cover"
-                            />
-                            <div class="p-4">
-                                <h2 class="text-2xl font-bold mb-2 hover:text-blue-600 transition-colors">
-                                    Super Bowl ticket prices surge, on pace to be most expensive ever
-                                </h2>
-                                <p class="text-sm text-gray-600 mb-3">4 Feb 2024 2:07 PM</p>
-                                <p class="text-gray-800">
-                                    Super Bowl ticket buyers are facing a price surge for Sunday&#x27;s championship
-                                    game owing to the dazzling, neon-lit setting of first-time host Las Vegas and 49ers
-                                    fans&#x27; hopes to reverse their 2020 loss to the defending champion Kansas City
-                                    Chiefs.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-span-1 space-y-4">
-                        <div
-                            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
-                        >
-                            <img
-                                src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                                alt="Reserve Bank of India logo"
-                                class="w-full h-[100px] object-cover"
-                            />
-                            <div class="p-3">
-                                <h3 class="font-semibold hover:text-blue-600 transition-colors">
-                                    Gudur Invites Kangana To Movie
-                                </h3>
-                                <p class="text-sm text-gray-700 mt-1">
-                                    Gudur Invites Kangana To Movie Gudur Invites Kangana To Movie Gudur Invites Kangana
-                                    To MovieGudur Invites Kangana To Movie
-                                </p>
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
-                        >
-                            <img
-                                src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80"
-                                alt="Reserve Bank of India logo"
-                                class="w-full h-[100px] object-cover"
-                            />
-                            <div class="p-3">
-                                <h3 class="font-semibold hover:text-blue-600 transition-colors">
-                                    Gudur Invites Kangana To Movie
-                                </h3>
-                                <p class="text-sm text-gray-700 mt-1">
-                                    Gudur Invites Kangana To Movie Gudur Invites Kangana To Movie Gudur Invites Kangana
-                                    To MovieGudur Invites Kangana To Movie
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="culture-section">
+    <h1 class="section-title">{{ featuredArticle?.category?.name || 'Culture' }}</h1>
+    <hr class="section-divider">
+   
+    <!-- Loading indicator -->
+    <div *ngIf="loading" class="loading-indicator">
+      <div class="spinner"></div>
+    </div>
+  
+    <!-- Articles grid -->
+    <div *ngIf="!loading" class="articles-grid">
+      <!-- Left column -->
+      <div class="left-column">
+        <!-- Top article in left column -->
+        <div class="article small" *ngIf="cultureArticles.length > 0">
+          <img [src]="cultureArticles[0]?.image || 'https://via.placeholder.com/400x200'" 
+               [alt]="cultureArticles[0]?.title" 
+               class="article-image">
+          <div class="article-content">
+            <h2 class="article-title"><a [routerLink]="['/article', cultureArticles[0]?.id]">{{ cultureArticles[0]?.title }}</a></h2>
+            <p class="article-text">{{ cultureArticles[0]?.description }}</p>
+            <div class="article-meta">
+              <span class="article-time">{{ getTimeAgo(cultureArticles[0]?.publicationDate) }}</span>
+              <span class="article-category">{{ cultureArticles[0]?.category?.name || 'Culture' }}</span>
             </div>
+          </div>
         </div>
+        
+        <!-- Bottom article in left column -->
+        <div class="article small" *ngIf="cultureArticles.length > 1">
+          <img [src]="cultureArticles[1]?.image || 'https://via.placeholder.com/400x200'" 
+               [alt]="cultureArticles[1]?.title" 
+               class="article-image">
+          <div class="article-content">
+            <h2 class="article-title"><a [routerLink]="['/article', cultureArticles[1]?.id]">{{ cultureArticles[1]?.title }}</a></h2>
+            <p class="article-text">{{ cultureArticles[1]?.description }}</p>
+          </div>
+        </div>
+      </div>
+     
+      <!-- Middle column -->
+      <div class="middle-column">
+        <div class="article large" *ngIf="featuredArticle">
+          <img [src]="featuredArticle.image || 'https://via.placeholder.com/800x400'" 
+               [alt]="featuredArticle.title" 
+               class="article-image">
+          <div class="article-content">
+            <h2 class="article-title large-title"><a [routerLink]="['/article', featuredArticle.id]">{{ featuredArticle.title }}</a></h2>
+            <p class="article-text">{{ featuredArticle.description }}</p>
+          </div>
+        </div>
+      </div>
+     
+      <!-- Right column -->
+      <div class="right-column">
+        <!-- Top article in right column -->
+        <div class="article small" *ngIf="cultureArticles.length > 2">
+          <img [src]="cultureArticles[2]?.image || 'https://via.placeholder.com/400x200'" 
+               [alt]="cultureArticles[2]?.title" 
+               class="article-image">
+          <div class="article-content">
+            <h2 class="article-title"><a [routerLink]="['/article', cultureArticles[2]?.id]">{{ cultureArticles[2]?.title }}</a></h2>
+            <p class="article-text">{{ cultureArticles[2]?.description }}</p>
+            <div class="article-meta">
+              <span class="article-time">{{ getTimeAgo(cultureArticles[2]?.publicationDate) }}</span>
+              <span class="article-category">{{ cultureArticles[2]?.category?.name || 'Culture' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bottom article in right column -->
+        <div class="article small" *ngIf="cultureArticles.length > 3">
+          <img [src]="cultureArticles[3]?.image || 'https://via.placeholder.com/400x200'" 
+               [alt]="cultureArticles[3]?.title" 
+               class="article-image">
+          <div class="article-content">
+            <h2 class="article-title"><a [routerLink]="['/article', cultureArticles[3]?.id]">{{ cultureArticles[3]?.title }}</a></h2>
+            <p class="article-text">{{ cultureArticles[3]?.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
