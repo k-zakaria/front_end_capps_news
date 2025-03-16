@@ -27,12 +27,12 @@ export const routes: Routes = [
         component: DashbordsComponent,
         children: [
             {
-                path: 'article',
+                path: 'articles',
                 component: ArticleComponent,
                 canActivate: [authGuard],
             },
             {
-                path: 'category',
+                path: 'categories',
                 component: CategoryComponent,
                 canActivate: [authGuard],
             },

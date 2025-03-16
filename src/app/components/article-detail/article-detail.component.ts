@@ -8,7 +8,7 @@ import { FormatContentPipe } from '../../pipes/format-content.pipe';
 @Component({
   selector: 'app-article-detail',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormatContentPipe],
+  imports: [CommonModule, FormatContentPipe],
   templateUrl: './article-detail.component.html',
   styleUrl: './article-detail.component.css'
 })

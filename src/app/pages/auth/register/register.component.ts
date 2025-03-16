@@ -30,19 +30,19 @@ export class RegisterComponent {
       console.error('Form is invalid');
       return;
     }
-  
+
     const { username, email, password } = this.registerForm.value;
     console.log('Sending register request:', { username, email, password });
     this.loading = true;
-  
+
     this.authService.register(username, email, password).subscribe({
       next: () => {
         this.loading = false;
         this.router.navigate(['/auth/login']);
       },
-      error: (error) => {
+      error: () => {
         this.loading = false;
-        this.errorMessage = error.message || 'Registration failed. Please try again.';
+        this.errorMessage = 'Registration failed. Please try again.';
       },
     });
   }
