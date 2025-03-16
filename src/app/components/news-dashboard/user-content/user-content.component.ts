@@ -44,6 +44,7 @@ export class UserContentComponent implements OnInit {
       next: (users) => {
         this.users = users;
         this.loading = false;
+        console.log(users)
       },
       error: (err) => {
         console.error('Failed to fetch users:', err);
@@ -54,7 +55,6 @@ export class UserContentComponent implements OnInit {
   }
 
   openAddModal(): void {
-    this.resetForm();
     this.editMode = false;
     this.selectedUserId = null;
     this.isModalOpen = true;
@@ -80,7 +80,6 @@ export class UserContentComponent implements OnInit {
 
   closeModal(): void {
     this.isModalOpen = false;
-    this.resetForm();
   }
 
   closeRoleModal(): void {
@@ -91,89 +90,7 @@ export class UserContentComponent implements OnInit {
     this.successMessage = '';
   }
 
-  resetForm(): void {
-    this.userForm = {
-      username: '',
-      email: '',
-      password: '',
-      role: 'USER'
-    };
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
-
-  saveUser(): void {
-    if (this.editMode && this.selectedUserId) {
-      this.updateUser();
-    } else {
-      this.createUser();
-    }
-  }
-
-  createUser(): void {
-    this.loading = true;
-    this.errorMessage = '';
-
-    this.userService.createUser(this.userForm).subscribe({
-      next: (newUser) => {
-        this.users.push(newUser);
-        this.successMessage = 'User created successfully!';
-        this.loading = false;
-
-        // Fermer la modale après un délai
-        setTimeout(() => {
-          this.closeModal();
-          this.fetchAllUsers(); // Rafraîchir la liste
-        }, 1500);
-      },
-      error: (err) => {
-        console.error('Failed to create user:', err);
-        this.errorMessage = 'Failed to create user. Please try again.';
-        this.loading = false;
-      }
-    });
-  }
-
-  updateUser(): void {
-    if (!this.selectedUserId) return;
-
-    this.loading = true;
-    this.errorMessage = '';
-
-    let dataToSend: any;
-
-    // Si le mot de passe est vide lors de l'édition, on crée un objet sans cette propriété
-    if (this.editMode && !this.userForm.password) {
-      const { password, ...rest } = this.userForm;
-      dataToSend = rest;
-    } else {
-      dataToSend = { ...this.userForm };
-    }
-
-    this.userService.updateUser(this.selectedUserId, dataToSend).subscribe({
-      next: (updatedUser) => {
-        // Mettre à jour l'utilisateur dans le tableau local
-        const index = this.users.findIndex(u => u.id === this.selectedUserId);
-        if (index !== -1) {
-          this.users[index] = updatedUser;
-        }
-
-        this.successMessage = 'User updated successfully!';
-        this.loading = false;
-
-        // Fermer la modale après un délai
-        setTimeout(() => {
-          this.closeModal();
-          this.fetchAllUsers(); // Rafraîchir la liste
-        }, 1500);
-      },
-      error: (err) => {
-        console.error('Failed to update user:', err);
-        this.errorMessage = 'Failed to update user. Please try again.';
-        this.loading = false;
-      }
-    });
-  }
+  
 
   updateUserRole(): void {
     if (!this.selectedUserId || !this.selectedRole) {

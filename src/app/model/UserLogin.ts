@@ -15,7 +15,7 @@ export interface UserResVM {
   username: string;
   email: string;
   password?: string;
-  role?: string;
+  role: string;
   createdAt?: string;
   updatedAt?: string;
 }
