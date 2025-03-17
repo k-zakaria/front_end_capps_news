@@ -29,7 +29,7 @@ export class LastCardsTravelComponent implements OnInit {
   fetchArticlesByCategory(categoryId: number): void {
     this.articleService.getArticlesByCategoryId(categoryId).subscribe({
       next: (articles) => {
-        this.articles = articles;
+        this.articles = articles.filter(article => article.published);
         this.loading = false;
       },
       error: (err) => {

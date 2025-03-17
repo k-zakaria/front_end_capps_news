@@ -68,11 +68,11 @@ export class ArticleService {
   }
   
   publishArticle(id: string): Observable<ArticleResVM> {
-    return this.http.patch<ArticleResVM>(`${this.apiUrl}/article/${id}/publish`, {});
+    return this.http.put<ArticleResVM>(`${this.apiUrl}/article/${id}/publish`, {});
   }
   
   unpublishArticle(id: string): Observable<ArticleResVM> {
-    return this.http.patch<ArticleResVM>(`${this.apiUrl}/article/${id}/unpublish`, {});
+    return this.http.put<ArticleResVM>(`${this.apiUrl}/article/${id}/unpublish`, {});
   }
   
   // Méthode pour télécharger une image d'article

@@ -29,8 +29,9 @@ export class FirstCardsNewsComponent implements OnInit {
   fetchCultureArticles(categoryId: number): void {
     this.articleService.getArticlesByCategoryId(categoryId).subscribe({
       next: (articles) => {
+        const publishedArticles = articles.filter(article => article.published);
         // Tri par date de publication (du plus récent au plus ancien)
-        const sortedArticles = articles.sort((a, b) => {
+        const sortedArticles = publishedArticles.sort((a, b) => {
           return new Date(b.publicationDate || '').getTime() - new Date(a.publicationDate || '').getTime();
         });
         

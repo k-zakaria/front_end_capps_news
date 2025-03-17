@@ -1,42 +1,49 @@
-<div id="webcrumbs">
-  <div class="flex items-center justify-between p-4 border-b border-gray-200">
-    <div class="flex items-center gap-4"> <button
-        class="p-1 hover:bg-gray-100 rounded-sm transition-colors duration-200"> <span
-          class="material-symbols-outlined">menu</span> </button> <button
-        class="p-1 hover:bg-gray-100 rounded-sm transition-colors duration-200"> <span
-          class="material-symbols-outlined">search</span> </button> </div>
-    <div class="flex items-center gap-1">
-      <div class="bg-black text-white font-bold text-xl px-2 py-1">C</div>
-      <div class="bg-black text-white font-bold text-xl px-2 py-1">A</div>
-      <div class="bg-black text-white font-bold text-xl px-2 py-1">P</div>
-      <div class="bg-black text-white font-bold text-xl px-2 py-1">P</div>
-      <div class="bg-black text-white font-bold text-xl px-2 py-1">S</div>
+<header class="border-b border-gray-200">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Top bar with sections, date, search and login -->
+    <div class="flex justify-between items-center py-2">
+      <button class="text-gray-800 text-xs font-medium uppercase tracking-wide">SECTIONS</button>
+      <div class="text-gray-500 text-xs">Friday, February 24, 2017</div>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+          <span class="ml-1 text-xs uppercase tracking-wide">SEARCH</span>
+        </div>
+        <button class="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded hover:bg-gray-300">
+          Log in
+        </button>
+      </div>
     </div>
-    <div class="flex items-center gap-3">
-      <button routerLink="/auth/register"  class="bg-black text-white px-4 py-1 text-sm font-medium hover:bg-gray-800 transition-colors duration-200">Register</button>
-      <button routerLink="/auth/login" class="text-black text-sm font-medium hover:underline transition-all duration-200">Sign In</button>
+
+    <!-- Logo section -->
+    <div class="text-center py-6">
+      <a href="/" class="inline-block">
+        <h1 class="text-5xl font-serif font-bold tracking-tight">Capps News</h1>
+      </a>
     </div>
-  </div>
-  <div class="flex justify-center items-center border-b border-gray-200">
-    <nav class="flex items-center space-x-6 py-3 px-4">
-      <a routerLinkActive="nav-active" routerLink="/vesitor"
+
+    <!-- Navigation links -->
+    <nav class="flex justify-center space-x-8 py-3 border-t border-gray-200">
+      <a routerLinkActive="nav-active" routerLink=""
         class="text-sm font-medium hover:underline transition-all duration-200">Home</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/news', 1]"
+      <a routerLinkActive="nav-active" [routerLink]="['/news', 1]"
         class="text-sm font-medium hover:underline transition-all duration-200">News</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/sport', 2]"
+      <a routerLinkActive="nav-active" [routerLink]="['/sport', 2]"
         class="text-sm font-medium hover:underline transition-all duration-200">Sport</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/business', 3]"
+      <a routerLinkActive="nav-active" [routerLink]="['/business', 3]"
         class="text-sm font-medium hover:underline transition-all duration-200">Business</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/innovation', 4]"
+      <a routerLinkActive="nav-active" [routerLink]="['/innovation', 4]"
         class="text-sm font-medium hover:underline transition-all duration-200">Innovation</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/culture', 5]"
+      <a routerLinkActive="nav-active" [routerLink]="['/culture', 5]"
         class="text-sm font-medium hover:underline transition-all duration-200">Culture</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/arts', 6]" F
+      <a routerLinkActive="nav-active" [routerLink]="['/arts', 6]" F
         class="text-sm font-medium hover:underline transition-all duration-200">Arts</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/travel', 7]"
+      <a routerLinkActive="nav-active" [routerLink]="['/travel', 7]"
         class="text-sm font-medium hover:underline transition-all duration-200">Travel</a>
-      <a routerLinkActive="nav-active" [routerLink]="['/vesitor/earth', 8]"
+      <a routerLinkActive="nav-active" [routerLink]="['/earth', 8]"
         class="text-sm font-medium hover:underline transition-all duration-200">Earth</a>
     </nav>
   </div>
-</div>
+</header>

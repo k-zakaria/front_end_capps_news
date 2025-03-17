@@ -1,4 +1,4 @@
-<div id="home">
+<div id="home" class=" w-full ">
     <div class="w-70 flex justify-center">
         <div class="font-sans bg-white">
             <hr class="mb-4">
@@ -14,7 +14,9 @@
                         {{ (article.content || '').slice(0, 100) }}...
                     </p>
                     <div class="flex items-center text-xs text-gray-500 mt-1">
-                        <span>1 day ago</span> <span class="mx-2">|</span> <span>US &amp; Canada</span>
+                        <span>{{ article.pubish }}</span>
+                        <span class="mx-2">|</span>
+                        <span>{{ article.category?.name || 'News' }}</span>
                     </div>
                 </div>
             </div>

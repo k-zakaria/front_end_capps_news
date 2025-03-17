@@ -31,7 +31,6 @@ export class AuthorArticlesComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     console.log('Current user:', this.currentUser);
     this.loadAuthorArticles();
-    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
 
   }
 

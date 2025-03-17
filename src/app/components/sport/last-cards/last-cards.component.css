@@ -367,6 +367,13 @@ video {
     --tw-contain-style: ;
 }
 
+#home{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1vh;
+    font-family: 'Helvetica', 'Arial', sans-serif;  
+}
+
 #home .mx-2 {
     margin-left: 12px;
     margin-right: 12px;
@@ -473,11 +480,7 @@ video {
     --tw-border-opacity: 1;
     border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
-#home{
-    margin-top: 3%;
-    margin-left: 3%;
-    margin-right: 3%;
-}
+
 
 #home .bg-gray-100 {
     --tw-bg-opacity: 1;

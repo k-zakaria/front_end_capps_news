@@ -1,5 +1,5 @@
 <!-- src/app/components/latest-articles/latest-articles.component.html -->
-<div id="webcrumbs">
+<div id="webcrumbs" >
     <div class="bg-white border-t border-b border-gray-200">
       <h2 class="text-xl font-bold px-4 py-2 border-b border-gray-200">More to explore</h2>
   
@@ -37,8 +37,7 @@
                   {{ article.description }}
                 </p>
                 <div class="flex items-center text-xs text-gray-500">
-                  <span>{{ getTimeAgo(article.publicationDate) }}</span> 
-                  <span class="mx-2">|</span> 
+                    <span>{{ article.publicationDate| date: 'short' }}</span> <span class="mx-2">|</span>
                   <span>{{ article.category?.name || 'News' }}</span>
                 </div>
               </div>

@@ -15,7 +15,7 @@ export class LastCardsComponent implements OnInit {
   latestArticle: ArticleResVM | null = null;
   loading = true;
 
-  constructor(private articleService: ArticleService, private router: Router,) {}
+  constructor(private articleService: ArticleService, private router: Router,) { }
 
   ngOnInit(): void {
     this.fetchAllArticles();
@@ -25,7 +25,7 @@ export class LastCardsComponent implements OnInit {
   fetchAllArticles(): void {
     this.articleService.getAllArticles().subscribe({
       next: (articles) => {
-        this.articles = articles;
+        this.articles = articles.filter(article => article.published);
         this.loading = false;
       },
       error: (err) => {

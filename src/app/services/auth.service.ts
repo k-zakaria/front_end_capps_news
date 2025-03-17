@@ -76,7 +76,6 @@ export class AuthService {
 
   isUserLoginenticated() {
     const token = this.getAccessToken();
-    console.log('Token:', token);
     return !!token;
   }
 

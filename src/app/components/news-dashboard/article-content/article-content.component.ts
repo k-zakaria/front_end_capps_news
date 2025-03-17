@@ -18,6 +18,7 @@ import { TagResVM } from '../../../model/tag-res-vm';
 export class ArticleContentComponent implements OnInit {
   articles: ArticleResVM[] = [];
   filteredArticles: ArticleResVM[] = [];
+  displayedArticles: ArticleResVM[] = []; // Nouvelle propriété pour les articles affichés après pagination
   categories: CategoryResVM[] = [];
   tags: TagResVM[] = [];
   
@@ -126,7 +127,7 @@ export class ArticleContentComponent implements OnInit {
       title: article.title,
       description: article.description,
       content: article.content,
-      image: article.image || '', // Utilisez une chaîne vide par défaut si image est undefined
+      image: article.image || '', 
       categoryId: article.category?.id || 0,
       tagIds: article.tags?.map(tag => tag.id) || [],
       published: article.published
@@ -134,8 +135,12 @@ export class ArticleContentComponent implements OnInit {
     
     this.selectedArticleId = article.id || null;
     this.editMode = true;
-    this.selectedArticleId = article.id;
     this.isModalOpen = true;
+    
+    // Prévisualization de l'image si disponible
+    if (article.image) {
+      this.imagePreview = article.image;
+    }
   }
   
   closeModal(): void {
@@ -187,7 +192,6 @@ export class ArticleContentComponent implements OnInit {
   }
   
   saveArticle(): void {
-    // Plus besoin de télécharger l'image séparément
     this.loading = true;
     this.errorMessage = '';
     
@@ -398,9 +402,9 @@ export class ArticleContentComponent implements OnInit {
     if (this.searchQuery) {
       const query = this.searchQuery.toLowerCase();
       result = result.filter(article => 
-        article.title.toLowerCase().includes(query) || 
-        article.description.toLowerCase().includes(query) ||
-        article.content.toLowerCase().includes(query)
+        article.title?.toLowerCase().includes(query) || 
+        article.description?.toLowerCase().includes(query) ||
+        article.content?.toLowerCase().includes(query)
       );
     }
     
@@ -450,6 +454,15 @@ export class ArticleContentComponent implements OnInit {
     if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
     }
+    
+    // Calculer les articles à afficher basés sur la pagination actuelle
+    this.updateDisplayedArticles();
+  }
+  
+  // Nouvelle méthode pour mettre à jour les articles affichés
+  updateDisplayedArticles(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.displayedArticles = this.filteredArticles.slice(startIndex, startIndex + this.itemsPerPage);
   }
   
   clearFilters(): void {
@@ -466,15 +479,14 @@ export class ArticleContentComponent implements OnInit {
   
   // Pagination
   goToPage(page: number | string): void {
-    // Ignorer la navigation si la page est "..."
     if (page === '...') return;
     
-    // Convertir en nombre et vérifier les limites
     const pageNum = typeof page === 'string' ? parseInt(page) : page;
     if (pageNum >= 1 && pageNum <= this.totalPages) {
         this.currentPage = pageNum;
+        this.updateDisplayedArticles();
     }
-}
+  }
   
   getPagesArray(): (number | string)[] {
     const pages: (number | string)[] = [];
@@ -502,10 +514,5 @@ export class ArticleContentComponent implements OnInit {
     }
     
     return pages;
-  }
-  
-  getCurrentPageItems(): ArticleResVM[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.filteredArticles.slice(startIndex, startIndex + this.itemsPerPage);
   }
 }

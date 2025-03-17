@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
     this.articleService.getAllArticles().subscribe({
       next: (articles) => {
         // Filtrer uniquement les articles publiés
-        const publishedArticles = articles.filter(article => article.content);
+        const publishedArticles = articles.filter(article => article.published);
         
         // Trier par date de publication (du plus récent au plus ancien)
         this.articles = publishedArticles.sort((a, b) => {

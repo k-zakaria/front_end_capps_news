@@ -55,7 +55,7 @@ export const routes: Routes = [
     },
 
     {
-        path: 'vesitor',
+        path: '',
         component: VesitorComponent,
         children: [
             {

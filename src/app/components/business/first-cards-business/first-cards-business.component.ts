@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ArticleResVM } from '../../../model/article-res-vm';
 import { ArticleService } from '../../../services/article.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-first-cards-business',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,DatePipe],
   templateUrl: './first-cards-business.component.html',
   styleUrl: './first-cards-business.component.css'
 })
@@ -29,8 +29,9 @@ export class FirstCardsBusinessComponent implements OnInit {
   fetchCultureArticles(categoryId: number): void {
     this.articleService.getArticlesByCategoryId(categoryId).subscribe({
       next: (articles) => {
+        const publishedArticles = articles.filter(article => article.published);
         // Tri par date de publication (du plus récent au plus ancien)
-        const sortedArticles = articles.sort((a, b) => {
+        const sortedArticles = publishedArticles.sort((a, b) => {
           return new Date(b.publicationDate || '').getTime() - new Date(a.publicationDate || '').getTime();
         });
         
