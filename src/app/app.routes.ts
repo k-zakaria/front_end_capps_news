@@ -19,6 +19,7 @@ import { TagComponent } from './pages/news-dashboard/tag/tag.component';
 import { UserComponent } from './pages/news-dashboard/user/user.component';
 import { AuthorAuthorComponent } from './pages/news-dashboard/author-author/author-author.component';
 import { ArticleDetailComponent } from './components/article-detail/article-detail.component';
+import { SearchComponent } from './pages/search/search.component';
 
 export const routes: Routes = [
 
@@ -97,6 +98,10 @@ export const routes: Routes = [
             {
                 path: 'article/:id',
                 component: ArticleDetailComponent
+            },
+            {
+                path: 'search',
+                component: SearchComponent
             }
 
         ]

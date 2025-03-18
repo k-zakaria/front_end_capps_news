@@ -1,9 +1,38 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ArticleReqVM, ArticleResVM } from '../model/article-res-vm';
 import { CategoryResVM } from '../model/category-res-vm';
 import { TagResVM } from '../model/tag-res-vm';
+
+export interface PaginatedResponse<T> {
+  content: T[];
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  last: boolean;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -92,6 +121,18 @@ export class ArticleService {
         return throwError(() => error);
       })
     );
+  }
+
+
+
+  getPaginatedArticles(page: number = 0, size: number = 8): Observable<PaginatedResponse<ArticleResVM>> {
+    return this.http.get<PaginatedResponse<ArticleResVM>>(`${this.apiUrl}/articles/paginated`, {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      }
+  
+    });
   }
 
   

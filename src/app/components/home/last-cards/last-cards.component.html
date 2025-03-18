@@ -14,8 +14,9 @@
                             {{ article.description }}
                         </p>
                         <div class="flex items-center text-xs text-gray-500 mt-1">
-                            <span>{{ article.publicationDate| date: 'short' }}</span> <span class="mx-2">|</span>
-                            <span>Category {{ article.publicationDate }}</span>
+                            <span>{{ article.publicationDate | date: 'short' }}</span> 
+                            <span class="mx-2">|</span> 
+                            <span>{{ article.category?.name || 'Uncategorized' }}</span>
                         </div>
                     </div>
                 </div>
@@ -23,3 +24,4 @@
         </div>
     </div>
 </div>
+
