@@ -1,13 +1,13 @@
   export interface UserLogin {
     accessToken: string,
-    username: string,
-    email: string,
-    cni: string,
-    role: string
+    refreshToken: string,
   }
 
   export interface AuthUser {
+    id: number,
     username: string,
+    role: string,
+    permission: string[],
   }
 
 export interface UserResVM {

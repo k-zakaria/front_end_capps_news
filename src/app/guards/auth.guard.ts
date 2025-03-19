@@ -5,22 +5,19 @@ import { CanActivateFn, Router } from '@angular/router';
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   
-  // Vérifier la clé 'user' au lieu de 'currentUser'
-  const userStr = localStorage.getItem('user');
+  // Check for the access token directly
+  const token = localStorage.getItem('accessToken');
   
-  if (userStr) {
-    try {
-      const user = JSON.parse(userStr);
-      // Vérifiez que le token existe
-      if (user && user.token) {
-        return true;
-      }
-    } catch (error) {
-      console.error('Erreur de parsing JSON pour user:', error);
-    }
+  if (token) {
+    // Token exists, user is authenticated
+    console.log('Auth guard: Access token exists, allowing navigation');
+    return true;
   }
   
-  // Redirection avec l'URL actuelle comme returnUrl
+  // Log for debugging
+  console.log('Auth guard: No access token found, redirecting to login');
+  
+  // Redirect with the current URL as returnUrl
   router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url }});
   return false;
 };

@@ -39,7 +39,7 @@ export class TopNavComponent implements OnInit {
   }
 
   // Méthode pour obtenir les détails complets de l'utilisateur (avec le rôle)
-  getCurrentUserDetails(): UserLogin | null {
+  getCurrentUserDetails(): AuthUser | null {
     return this.authService.getCurrentUser();
   }
 

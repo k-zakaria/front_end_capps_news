@@ -1,16 +1,22 @@
 // src/app/components/author/author-articles/author-articles.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ArticleService } from '../../../services/article.service';
 import { AuthService } from '../../../services/auth.service';
-import { ArticleResVM } from '../../../model/article-res-vm';
+import { ArticleReqVM, ArticleResVM } from '../../../model/article-res-vm';
 import { Observable } from 'rxjs';
+import { TruncatePipe } from '../../../pipes/truncate.pipe';
+import { CategoryService } from '../../../services/category.service';
+import { TagService } from '../../../services/tag.service';
+import { CategoryResVM } from '../../../model/category-res-vm';
+import { TagResVM } from '../../../model/tag-res-vm';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-author-articles',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TruncatePipe, FormsModule],
   templateUrl: './author-articles.component.html',
   styleUrl: './author-articles.component.css'
 })
@@ -19,25 +25,60 @@ export class AuthorArticlesComponent implements OnInit {
   currentUser: any = null;
   loading: boolean = true;
   errorMessage: string = '';
+  categories: CategoryResVM[] = [];
+  tags: TagResVM[] = [];
+
+  isModalOpen = false;
+  previewModalOpen = false;
+  confirmationModalOpen = false;
+  editMode = false;
+  selectedArticleId: string | null = null;
+  previewArticle: ArticleResVM | null = null;
+  imagePreview: string | null = null;
+  successMessage: string = '';
+  selectedFile: File | null = null;
 
   constructor(
     private articleService: ArticleService,
     private authService: AuthService,
     public router: Router, // Changer en public
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private categoryService: CategoryService,
+    private tagService: TagService
+  ) { }
+
+  articleForm: ArticleReqVM = {
+    title: '',
+    description: '',
+    content: '',
+    image: '',
+    tagIds: [],
+    categoryId: 0,
+    published: false
+  };
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
+    // Utilisez la méthode getUserFromToken
+    this.currentUser = this.authService.getUserFromToken();
     console.log('Current user:', this.currentUser);
-    this.loadAuthorArticles();
+
+    if (this.currentUser) {
+      this.loadAuthorArticles();
+      this.fetchCategories();
+      this.fetchTags();
+    } else {
+      this.errorMessage = 'Utilisateur non authentifié';
+      this.loading = false;
+    }
 
   }
 
   loadAuthorArticles(): void {
+    if (!this.currentUser) return;
+
     const username = this.currentUser.username;
     console.log('Fetching articles for author:', username);
-    
+
     this.articleService.getArticlesByAuthor(username).subscribe({
       next: (articles) => {
         console.log('Articles received:', articles);
@@ -48,9 +89,6 @@ export class AuthorArticlesComponent implements OnInit {
         console.error('Failed to load author articles:', err);
         this.errorMessage = 'Failed to load your articles. Please try again.';
         this.loading = false;
-      },
-      complete: () => {
-        console.log('Articles request completed');
       }
     });
   }
@@ -67,6 +105,166 @@ export class AuthorArticlesComponent implements OnInit {
     });
   }
 
+  fetchCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (err) => {
+        console.error('Failed to fetch categories:', err);
+      }
+    });
+  }
+
+  fetchTags(): void {
+    this.tagService.getAllTags().subscribe({
+      next: (tags) => {
+        this.tags = tags;
+      },
+      error: (err) => {
+        console.error('Failed to fetch tags:', err);
+      }
+    });
+  }
+
+  openAddModal(): void {
+    this.resetForm();
+    this.editMode = false;
+    this.selectedArticleId = null;
+    this.isModalOpen = true;
+  }
+
+  openEditModal(article: ArticleResVM): void {
+    this.resetForm();
+    this.articleForm = {
+      title: article.title,
+      description: article.description,
+      content: article.content,
+      image: article.image || '',
+      categoryId: article.category?.id || 0,
+      tagIds: article.tags?.map(tag => tag.id) || [],
+      published: article.published
+    };
+
+    this.selectedArticleId = article.id || null;
+    this.editMode = true;
+    this.isModalOpen = true;
+
+    // Prévisualization de l'image si disponible
+    if (article.image) {
+      this.imagePreview = article.image;
+    }
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.resetForm();
+  }
+
+  resetForm(): void {
+    this.articleForm = {
+      title: '',
+      description: '',
+      content: '',
+      image: '',
+      tagIds: [],
+      categoryId: 0,
+      published: false
+    };
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+
+      // Créer une URL pour prévisualiser l'image
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  toggleTagSelection(tagId: number): void {
+    const index = this.articleForm.tagIds.indexOf(tagId);
+    if (index === -1) {
+      this.articleForm.tagIds.push(tagId);
+    } else {
+      this.articleForm.tagIds.splice(index, 1);
+    }
+  }
+
+  isTagSelected(tagId: number): boolean {
+    return this.articleForm.tagIds.includes(tagId);
+  }
+
+  saveArticle(): void {
+    this.loading = true;
+    this.errorMessage = '';
+
+    if (this.editMode && this.selectedArticleId) {
+      this.updateArticle();
+    } else {
+      this.createArticle();
+    }
+  }
+
+  createArticle(): void {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.articleService.createArticle(this.articleForm, this.selectedFile).subscribe({
+      next: (newArticle) => {
+        this.articles.push(newArticle);
+        this.successMessage = 'Article created successfully!';
+        this.loading = false;
+
+        setTimeout(() => {
+          this.closeModal();
+        }, 1500);
+      },
+      error: (err) => {
+        console.error('Failed to create article:', err);
+        this.errorMessage = 'Failed to create article. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
+
+  updateArticle(): void {
+    if (!this.selectedArticleId) return;
+
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.articleService.updateArticle(this.selectedArticleId, this.articleForm, this.selectedFile).subscribe({
+      next: (updatedArticle) => {
+        const index = this.articles.findIndex(a => a.id === this.selectedArticleId);
+        if (index !== -1) {
+          this.articles[index] = updatedArticle;
+        }
+
+        this.successMessage = 'Article updated successfully!';
+        this.loading = false;
+
+        setTimeout(() => {
+          this.closeModal();
+        }, 1500);
+      },
+      error: (err) => {
+        console.error('Failed to update article:', err);
+        this.errorMessage = 'Failed to update article. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
+
   navigateToEditArticle(articleId: string): void {
     this.router.navigate(['/author/articles/edit', articleId]);
   }
@@ -79,7 +277,7 @@ export class AuthorArticlesComponent implements OnInit {
 
   deleteArticle(articleId: string): void {
     this.loading = true;
-    
+
     this.articleService.deleteArticle(articleId).subscribe({
       next: () => {
         // Filtrer l'article supprimé de la liste locale

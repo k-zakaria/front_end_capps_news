@@ -16,36 +16,51 @@ import { AuthService } from '../../../services/auth.service';
 export class LoginComponent {
   loading: boolean = false;
   errorMessage: string = '';
-
+  
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
-
+  
   authService = inject(AuthService);
   router = inject(Router);
-
+  
   onSubmit() {
     this.errorMessage = '';
+    
     if (this.loginForm.invalid) {
       console.error('Form is invalid');
       return;
     }
-
+    
     const { username, password } = this.loginForm.value;
     console.log('Sending login request:', { username, password });
-    this.loading = true;  // Set loading to true when login starts
-
+    this.loading = true;
+    
     this.authService.login(username, password).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Login successful', response);
         this.loading = false;
-        this.router.navigate(['/dashboard/articles']);
+        
+        // Force checking if token is actually stored
+        const token = this.authService.getAccessToken();
+        console.log('Token stored successfully:', !!token);
+        
+        // Add a small delay before redirecting (optional but can help)
+        setTimeout(() => {
+          this.router.navigate(['/dashboard/articles'])
+            .then(success => console.log('Navigation result:', success))
+            .catch(error => console.error('Navigation error:', error));
+        }, 100);
       },
-      error: () => {
+      error: (error) => {
+        console.error('Login error:', error);
         this.loading = false;
         this.errorMessage = 'Email or Password is wrong!';
       },
+      complete: () => {
+        console.log('Login request completed');
+      }
     });
   }
-
 }
