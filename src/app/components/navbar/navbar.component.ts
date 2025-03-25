@@ -14,51 +14,42 @@ import { AuthService } from '../../services/auth.service';
 export class NavbarComponent {
   searchQuery: string = '';
   
-  // Inject services
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // Expose user and authentication status
   user = this.authService.user;
   isAuthenticated = this.authService.isUserLoginenticated();
   
-  // Dropdown state
   isDropdownOpen: boolean = false;
 
   performSearch() {
     if (this.searchQuery.trim()) {
-      // Navigate to search results page with query
       this.router.navigate(['/search'], { 
         queryParams: { q: this.searchQuery }
       });
-      this.searchQuery = ''; // Reset search input
+      this.searchQuery = ''; 
     }
   }
 
-  // Logout method using AuthService
   logout() {
     this.authService.logout();
     this.isDropdownOpen = false;
   }
 
-  // Toggle dropdown
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  // Navigate to profile
   goToProfile() {
     this.router.navigate(['/profile']);
     this.isDropdownOpen = false;
   }
 
-  // Navigate to dashboard
   goToDashboard() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/dashboard/articles']);
     this.isDropdownOpen = false;
   }
 
-  // Get initials for user avatar
   getUserInitials(): string {
     const username = this.user()?.username;
     return username 
@@ -69,7 +60,6 @@ export class NavbarComponent {
       : '';
   }
 
-  // Navigation items
   navItems = [
     { label: 'Home', path: '/' },
     { label: 'News', path: '/news/1' },

@@ -40,7 +40,6 @@ export class AuthService {
     }
   
     try {
-      // Split the token into its parts
       const parts = token.split('.');
       if (parts.length !== 3) {
         console.error('Invalid JWT format: expected 3 parts but got', parts.length);
@@ -49,30 +48,22 @@ export class AuthService {
       
       const base64Url = parts[1];
       
-      // Replace characters for correct Base64 decoding
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       
-      // Decode and parse the payload
       let payload;
       try {
         payload = JSON.parse(window.atob(base64));
-        console.log('Successfully decoded token payload:', payload);
       } catch (e) {
         console.error('Error parsing token payload:', e);
         return null;
       }
       
-      // Check for required fields
       if (!payload) {
         console.error('Token payload is empty');
         return null;
       }
       
-      // Log all available fields to debug
-      console.log('Available fields in token:', Object.keys(payload));
-      
-      // Create user object with fallbacks for missing fields
-      return {
+            return {
         id: payload.id || 0,
         username: payload.username || payload.sub || '',
         role: payload.role || '',
@@ -95,28 +86,19 @@ export class AuthService {
     return token ? this.decodeToken(token) : null;
   }
 
-  // Updated to match backend response structure with token field
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(this.urlApi, { username, password }).pipe(
       tap((res) => {
-        console.log('Login response:', res);
         
-        // Check if the response contains a token field (not accessToken)
         if (!res || !res.token) {
-          console.error('Login response missing token', res);
           return;
         }
-  
-        // Store the token
-        this.setToken(res);
+          this.setToken(res);
         
-        // Decode the token to get user data
         const decodedUser = this.decodeToken(res.token);
         
-        // Set the user from the decoded token
         if (decodedUser) {
           this.user.set(decodedUser);
-          // Store user info without token
           const userInfo = {
             username: decodedUser.username,
             role: decodedUser.role,
@@ -139,13 +121,10 @@ export class AuthService {
           return;
         }
         
-        // Store the token
         this.setToken(res);
         
-        // Decode the token to get user data
         const decodedUser = this.decodeToken(res.token);
         
-        // Set the user from the decoded token
         if (decodedUser) {
           this.user.set(decodedUser);
           const userInfo = {

@@ -1,9 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ArticleReqVM, ArticleResVM } from '../model/article-res-vm';
-import { CategoryResVM } from '../model/category-res-vm';
-import { TagResVM } from '../model/tag-res-vm';
 
 export interface PaginatedResponse<T> {
   content: T[];
@@ -69,10 +67,8 @@ export class ArticleService {
   createArticle(articleData: ArticleReqVM, image: File | null): Observable<ArticleResVM> {
     const formData = new FormData();
     
-    // Convertir les données de l'article en JSON et les ajouter comme paramètre
     formData.append('article', JSON.stringify(articleData));
     
-    // Ajouter l'image si elle existe
     if (image) {
       formData.append('image', image);
     }
@@ -104,7 +100,6 @@ export class ArticleService {
     return this.http.put<ArticleResVM>(`${this.apiUrl}/article/${id}/unpublish`, {});
   }
   
-  // Méthode pour télécharger une image d'article
   uploadImage(file: File): Observable<{imageUrl: string}> {
     const formData = new FormData();
     formData.append('file', file);
@@ -113,17 +108,13 @@ export class ArticleService {
   }
 
   getArticlesByAuthor(username: string): Observable<ArticleResVM[]> {
-    console.log(`Calling API: ${this.apiUrl}/author/${username}`);
     return this.http.get<ArticleResVM[]>(`${this.apiUrl}/author/${username}`).pipe(
-      tap(articles => console.log('API response:', articles)),
       catchError(error => {
         console.error('API error:', error);
         return throwError(() => error);
       })
     );
   }
-
-
 
   getPaginatedArticles(page: number = 0, size: number = 8): Observable<PaginatedResponse<ArticleResVM>> {
     return this.http.get<PaginatedResponse<ArticleResVM>>(`${this.apiUrl}/articles/paginated`, {

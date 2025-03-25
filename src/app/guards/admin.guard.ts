@@ -1,22 +1,24 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
+  const authService = inject(AuthService);
   
-  // Check if user is authenticated and is an admin
-  const currentUser = localStorage.getItem('currentUser');
+  const token = localStorage.getItem('accessToken');
   
-  if (currentUser) {
-    const user = JSON.parse(currentUser);
-    
-    // Check if user has admin role
-    if (user.role === 'ADMIN') {
-      return true;
-    }
+  if (!token) {
+    router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url }});
+    return false;
   }
   
-  // User is not an admin, redirect to home page
+  const currentUser = authService.getCurrentUser();
+  
+  if (currentUser && currentUser.role === 'ADMIN') {
+    return true;
+  }
+  
   router.navigate(['/']);
   return false;
 };

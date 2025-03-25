@@ -41,8 +41,7 @@ export class AuthorArticlesComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private authService: AuthService,
-    public router: Router, // Changer en public
-    private route: ActivatedRoute,
+    public router: Router, 
     private categoryService: CategoryService,
     private tagService: TagService
   ) { }
@@ -58,9 +57,7 @@ export class AuthorArticlesComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // Utilisez la méthode getUserFromToken
     this.currentUser = this.authService.getUserFromToken();
-    console.log('Current user:', this.currentUser);
 
     if (this.currentUser) {
       this.loadAuthorArticles();
@@ -77,11 +74,9 @@ export class AuthorArticlesComponent implements OnInit {
     if (!this.currentUser) return;
 
     const username = this.currentUser.username;
-    console.log('Fetching articles for author:', username);
 
     this.articleService.getArticlesByAuthor(username).subscribe({
       next: (articles) => {
-        console.log('Articles received:', articles);
         this.articles = articles;
         this.loading = false;
       },
@@ -94,7 +89,6 @@ export class AuthorArticlesComponent implements OnInit {
   }
 
 
-  // Méthodes utilitaires pour la vue
   formatDate(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -280,7 +274,6 @@ export class AuthorArticlesComponent implements OnInit {
 
     this.articleService.deleteArticle(articleId).subscribe({
       next: () => {
-        // Filtrer l'article supprimé de la liste locale
         this.articles = this.articles.filter(article => article.id !== articleId);
         this.loading = false;
       },

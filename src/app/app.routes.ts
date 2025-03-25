@@ -21,6 +21,8 @@ import { AuthorAuthorComponent } from './pages/news-dashboard/author-author/auth
 import { ArticleDetailComponent } from './components/article-detail/article-detail.component';
 import { SearchComponent } from './pages/search/search.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { adminGuard } from './guards/admin.guard';
+import { authorGuard } from './guards/author.guard';
 
 export const routes: Routes = [
 
@@ -31,27 +33,27 @@ export const routes: Routes = [
             {
                 path: 'articles',
                 component: ArticleComponent,
-                canActivate: [authGuard],
+                canActivate: [authGuard ],
             },
             {
                 path: 'categories',
                 component: CategoryComponent,
-                canActivate: [authGuard],
+                canActivate: [authGuard, adminGuard],
             },
             {
                 path: 'tags',
                 component: TagComponent,
-                canActivate: [authGuard],
+                canActivate: [authGuard, adminGuard],
             },
             {
                 path: 'users',
                 component: UserComponent,
-                canActivate: [authGuard],
+                canActivate: [authGuard, adminGuard],
             },
             {
                 path: 'author/articles',
                 component: AuthorAuthorComponent,
-                canActivate: [authGuard],
+                canActivate: [authGuard, authorGuard],
             }
         ]
     },
