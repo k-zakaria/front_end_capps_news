@@ -13,6 +13,14 @@ import { TagFormData, TagResVM } from '../../../model/tag-res-vm';
 })
 export class TagContentComponent implements OnInit {
   tags: TagResVM[] = [];
+  filteredTags: TagResVM[] = [];
+  displayedTags: TagResVM[] = []; // Tags affichés après pagination
+  
+  // Pagination
+  itemsPerPage = 5;  // Nombre d'items par page
+  currentPage = 1;   // Page actuelle
+  totalPages = 1;    // Nombre total de pages
+  
   loading = true;
   isModalOpen = false;
   editMode = false;
@@ -36,6 +44,8 @@ export class TagContentComponent implements OnInit {
     this.tagService.getAllTags().subscribe({
       next: (tags) => {
         this.tags = tags;
+        this.filteredTags = tags; // Pour l'instant, pas de filtrage
+        this.updatePagination();
         this.loading = false;
       },
       error: (err) => {
@@ -44,6 +54,61 @@ export class TagContentComponent implements OnInit {
         this.errorMessage = 'Failed to load tags. Please try again.';
       },
     });
+  }
+  
+  // Méthode pour mettre à jour la pagination
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredTags.length / this.itemsPerPage);
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
+    }
+    this.updateDisplayedTags();
+  }
+
+  // Méthode pour mettre à jour les tags affichés
+  updateDisplayedTags(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.displayedTags = this.filteredTags.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  // Méthode pour aller à une page spécifique
+  goToPage(page: number | string): void {
+    if (page === '...') return;
+    
+    const pageNum = typeof page === 'string' ? parseInt(page) : page;
+    if (pageNum >= 1 && pageNum <= this.totalPages) {
+      this.currentPage = pageNum;
+      this.updateDisplayedTags();
+    }
+  }
+
+  // Générer le tableau des pages à afficher
+  getPagesArray(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    
+    if (this.totalPages <= 7) {
+      // Afficher toutes les pages si moins de 7 pages
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Toujours afficher la première page
+      pages.push(1);
+      
+      // Afficher des points de suspension ou les pages autour de la page actuelle
+      if (this.currentPage <= 3) {
+        // Près du début
+        pages.push(2, 3, 4, 5, '...', this.totalPages);
+      } else if (this.currentPage >= this.totalPages - 2) {
+        // Près de la fin
+        pages.push('...', this.totalPages - 4, this.totalPages - 3, this.totalPages - 2, this.totalPages - 1, this.totalPages);
+      } else {
+        // Au milieu
+        pages.push('...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', this.totalPages);
+      }
+    }
+    
+    return pages;
   }
   
   openAddModal(): void {
@@ -90,13 +155,14 @@ export class TagContentComponent implements OnInit {
     this.tagService.createTag(this.tagForm).subscribe({
       next: (newTag) => {
         this.tags.push(newTag);
+        this.filteredTags = this.tags;
+        this.updatePagination();
         this.successMessage = 'Tag created successfully!';
         this.loading = false;
         
         // Fermer la modale après un délai
         setTimeout(() => {
           this.closeModal();
-          this.fetchAllTags(); // Rafraîchir la liste
         }, 1500);
       },
       error: (err) => {
@@ -121,13 +187,14 @@ export class TagContentComponent implements OnInit {
           this.tags[index] = updatedTag;
         }
         
+        this.filteredTags = this.tags;
+        this.updatePagination();
         this.successMessage = 'Tag updated successfully!';
         this.loading = false;
         
         // Fermer la modale après un délai
         setTimeout(() => {
           this.closeModal();
-          this.fetchAllTags(); // Rafraîchir la liste
         }, 1500);
       },
       error: (err) => {
@@ -146,6 +213,8 @@ export class TagContentComponent implements OnInit {
         next: () => {
           // Supprimer le tag du tableau local
           this.tags = this.tags.filter(t => t.id !== tagId);
+          this.filteredTags = this.tags;
+          this.updatePagination();
           this.loading = false;
         },
         error: (err) => {

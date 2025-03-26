@@ -13,6 +13,14 @@ import { UserFormData, UserResVM } from '../../../model/UserLogin';
 })
 export class UserContentComponent implements OnInit {
   users: UserResVM[] = [];
+  filteredUsers: UserResVM[] = [];
+  displayedUsers: UserResVM[] = []; // Utilisateurs affichés après pagination
+  
+  // Pagination
+  itemsPerPage = 5;  // Nombre d'utilisateurs par page
+  currentPage = 1;   // Page actuelle
+  totalPages = 1;    // Nombre total de pages
+  
   loading = true;
   isModalOpen = false;
   editMode = false;
@@ -43,8 +51,10 @@ export class UserContentComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
+        this.filteredUsers = users; // Pour l'instant, pas de filtrage
+        this.updatePagination();
         this.loading = false;
-        console.log(users)
+        console.log(users);
       },
       error: (err) => {
         console.error('Failed to fetch users:', err);
@@ -52,6 +62,61 @@ export class UserContentComponent implements OnInit {
         this.errorMessage = 'Failed to load users. Please try again.';
       },
     });
+  }
+  
+  // Méthode pour mettre à jour la pagination
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
+    }
+    this.updateDisplayedUsers();
+  }
+
+  // Méthode pour mettre à jour les utilisateurs affichés
+  updateDisplayedUsers(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.displayedUsers = this.filteredUsers.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  // Méthode pour aller à une page spécifique
+  goToPage(page: number | string): void {
+    if (page === '...') return;
+    
+    const pageNum = typeof page === 'string' ? parseInt(page) : page;
+    if (pageNum >= 1 && pageNum <= this.totalPages) {
+      this.currentPage = pageNum;
+      this.updateDisplayedUsers();
+    }
+  }
+
+  // Générer le tableau des pages à afficher
+  getPagesArray(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    
+    if (this.totalPages <= 7) {
+      // Afficher toutes les pages si moins de 7 pages
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Toujours afficher la première page
+      pages.push(1);
+      
+      // Afficher des points de suspension ou les pages autour de la page actuelle
+      if (this.currentPage <= 3) {
+        // Près du début
+        pages.push(2, 3, 4, 5, '...', this.totalPages);
+      } else if (this.currentPage >= this.totalPages - 2) {
+        // Près de la fin
+        pages.push('...', this.totalPages - 4, this.totalPages - 3, this.totalPages - 2, this.totalPages - 1, this.totalPages);
+      } else {
+        // Au milieu
+        pages.push('...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', this.totalPages);
+      }
+    }
+    
+    return pages;
   }
 
   openAddModal(): void {
@@ -90,8 +155,6 @@ export class UserContentComponent implements OnInit {
     this.successMessage = '';
   }
 
-  
-
   updateUserRole(): void {
     if (!this.selectedUserId || !this.selectedRole) {
       return;
@@ -107,7 +170,9 @@ export class UserContentComponent implements OnInit {
         if (index !== -1) {
           this.users[index] = updatedUser;
         }
-
+        
+        this.filteredUsers = this.users;
+        this.updatePagination();
         this.successMessage = 'User role updated successfully!';
         this.loading = false;
 
@@ -124,7 +189,6 @@ export class UserContentComponent implements OnInit {
     });
   }
 
-
   deleteUser(userId: number | undefined): void {
     if (userId === undefined) {
       this.errorMessage = 'Cannot delete user with undefined ID';
@@ -138,6 +202,8 @@ export class UserContentComponent implements OnInit {
         next: () => {
           // Supprimer l'utilisateur du tableau local
           this.users = this.users.filter(u => u.id !== userId);
+          this.filteredUsers = this.users;
+          this.updatePagination();
           this.loading = false;
         },
         error: (err) => {

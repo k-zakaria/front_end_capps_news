@@ -22,11 +22,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class AuthorArticlesComponent implements OnInit {
   articles: ArticleResVM[] = [];
+  filteredArticles: ArticleResVM[] = [];  // Articles filtrés (si besoin)
+  displayedArticles: ArticleResVM[] = []; // Articles affichés après pagination
   currentUser: any = null;
   loading: boolean = true;
   errorMessage: string = '';
   categories: CategoryResVM[] = [];
   tags: TagResVM[] = [];
+
+  // Pagination
+  itemsPerPage = 5; // Nombre d'articles par page
+  currentPage = 1;  // Page actuelle
+  totalPages = 1;   // Nombre total de pages
 
   isModalOpen = false;
   previewModalOpen = false;
@@ -67,7 +74,6 @@ export class AuthorArticlesComponent implements OnInit {
       this.errorMessage = 'Utilisateur non authentifié';
       this.loading = false;
     }
-
   }
 
   loadAuthorArticles(): void {
@@ -78,6 +84,8 @@ export class AuthorArticlesComponent implements OnInit {
     this.articleService.getArticlesByAuthor(username).subscribe({
       next: (articles) => {
         this.articles = articles;
+        this.filteredArticles = articles; // Pour l'instant, on n'applique pas de filtres
+        this.updatePagination();
         this.loading = false;
       },
       error: (err) => {
@@ -88,6 +96,60 @@ export class AuthorArticlesComponent implements OnInit {
     });
   }
 
+  // Méthode pour mettre à jour la pagination
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredArticles.length / this.itemsPerPage);
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
+    }
+    this.updateDisplayedArticles();
+  }
+
+  // Méthode pour mettre à jour les articles affichés
+  updateDisplayedArticles(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.displayedArticles = this.filteredArticles.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  // Méthode pour aller à une page spécifique
+  goToPage(page: number | string): void {
+    if (page === '...') return;
+    
+    const pageNum = typeof page === 'string' ? parseInt(page) : page;
+    if (pageNum >= 1 && pageNum <= this.totalPages) {
+      this.currentPage = pageNum;
+      this.updateDisplayedArticles();
+    }
+  }
+
+  // Générer le tableau des pages à afficher
+  getPagesArray(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    
+    if (this.totalPages <= 7) {
+      // Afficher toutes les pages si moins de 7 pages
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Toujours afficher la première page
+      pages.push(1);
+      
+      // Afficher des points de suspension ou les pages autour de la page actuelle
+      if (this.currentPage <= 3) {
+        // Près du début
+        pages.push(2, 3, 4, 5, '...', this.totalPages);
+      } else if (this.currentPage >= this.totalPages - 2) {
+        // Près de la fin
+        pages.push('...', this.totalPages - 4, this.totalPages - 3, this.totalPages - 2, this.totalPages - 1, this.totalPages);
+      } else {
+        // Au milieu
+        pages.push('...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', this.totalPages);
+      }
+    }
+    
+    return pages;
+  }
 
   formatDate(dateString: string): string {
     if (!dateString) return '';
@@ -216,6 +278,8 @@ export class AuthorArticlesComponent implements OnInit {
     this.articleService.createArticle(this.articleForm, this.selectedFile).subscribe({
       next: (newArticle) => {
         this.articles.push(newArticle);
+        this.filteredArticles = this.articles; // Mise à jour des articles filtrés
+        this.updatePagination(); // Mettre à jour la pagination
         this.successMessage = 'Article created successfully!';
         this.loading = false;
 
@@ -243,7 +307,8 @@ export class AuthorArticlesComponent implements OnInit {
         if (index !== -1) {
           this.articles[index] = updatedArticle;
         }
-
+        this.filteredArticles = this.articles; // Mise à jour des articles filtrés
+        this.updatePagination(); // Mettre à jour la pagination
         this.successMessage = 'Article updated successfully!';
         this.loading = false;
 
@@ -275,6 +340,8 @@ export class AuthorArticlesComponent implements OnInit {
     this.articleService.deleteArticle(articleId).subscribe({
       next: () => {
         this.articles = this.articles.filter(article => article.id !== articleId);
+        this.filteredArticles = this.articles; // Mise à jour des articles filtrés
+        this.updatePagination(); // Mettre à jour la pagination
         this.loading = false;
       },
       error: (err) => {
