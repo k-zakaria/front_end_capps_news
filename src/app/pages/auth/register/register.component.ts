@@ -42,7 +42,7 @@ export class RegisterComponent {
       },
       error: () => {
         this.loading = false;
-        this.errorMessage = 'Registration failed. Please try again.';
+        this.errorMessage = 'Registration failed Please try again.';
       },
     });
   }

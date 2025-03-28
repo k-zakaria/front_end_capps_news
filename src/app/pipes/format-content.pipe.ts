@@ -8,7 +8,6 @@ export class FormatContentPipe implements PipeTransform {
   transform(content: string | undefined): string {
     if (!content) return '';
     
-    // Convert line breaks to paragraphs
     return content
       .split('\n\n')
       .filter(paragraph => paragraph.trim() !== '')

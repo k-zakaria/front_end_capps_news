@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ArticleService } from '../../../services/article.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-last-cards-culture',
@@ -16,7 +16,8 @@ export class LastCardsCultureComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private articleService: ArticleService
+    private articleService: ArticleService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -37,5 +38,9 @@ export class LastCardsCultureComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  navigateToArticle(articleId: string): void {
+    this.router.navigate(['/article', articleId]);
   }
 }

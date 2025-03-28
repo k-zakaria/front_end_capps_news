@@ -18,22 +18,19 @@ import { TagResVM } from '../../../model/tag-res-vm';
 export class ArticleContentComponent implements OnInit {
   articles: ArticleResVM[] = [];
   filteredArticles: ArticleResVM[] = [];
-  displayedArticles: ArticleResVM[] = []; // Nouvelle propriété pour les articles affichés après pagination
+  displayedArticles: ArticleResVM[] = [];
   categories: CategoryResVM[] = [];
   tags: TagResVM[] = [];
   
-  // Pagination
   itemsPerPage = 10;
   currentPage = 1;
   totalPages = 1;
   
-  // Filtres
   searchQuery = '';
   categoryFilter: number | null = null;
   statusFilter: boolean | null = null;
   dateFilter: string | null = null;
   
-  // État du chargement et des modals
   loading = false;
   isModalOpen = false;
   previewModalOpen = false;
@@ -42,7 +39,6 @@ export class ArticleContentComponent implements OnInit {
   selectedArticleId: string | null = null;
   previewArticle: ArticleResVM | null = null;
   
-  // Confirmation
   confirmationTitle = '';
   confirmationMessage = '';
   confirmationActionText = '';
@@ -137,7 +133,6 @@ export class ArticleContentComponent implements OnInit {
     this.editMode = true;
     this.isModalOpen = true;
     
-    // Prévisualization de l'image si disponible
     if (article.image) {
       this.imagePreview = article.image;
     }
@@ -298,7 +293,6 @@ export class ArticleContentComponent implements OnInit {
     this.loading = true;
     
     if (article.published) {
-      // Dépublier l'article
       this.articleService.unpublishArticle(article.id).subscribe({
         next: (updatedArticle) => {
           const index = this.articles.findIndex(a => a.id === article.id);
@@ -315,7 +309,6 @@ export class ArticleContentComponent implements OnInit {
         }
       });
     } else {
-      // Publier l'article
       this.articleService.publishArticle(article.id).subscribe({
         next: (updatedArticle) => {
           const index = this.articles.findIndex(a => a.id === article.id);
@@ -334,7 +327,6 @@ export class ArticleContentComponent implements OnInit {
     }
   }
   
-  // Méthodes de prévisualisation
   openPreviewModal(article: ArticleResVM): void {
     this.previewArticle = article;
     this.previewModalOpen = true;
@@ -346,14 +338,12 @@ export class ArticleContentComponent implements OnInit {
   }
   
   formatContentForPreview(content: string): string {
-    // Convertir les sauts de ligne en balises <p>
     return content.split('\n\n')
       .filter(paragraph => paragraph.trim() !== '')
       .map(paragraph => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`)
       .join('');
   }
   
-  // Méthodes de confirmation
   showConfirmationModal(title: string, message: string, actionText: string, actionType: string, callback: () => void): void {
     this.confirmationTitle = title;
     this.confirmationMessage = message;
@@ -374,7 +364,6 @@ export class ArticleContentComponent implements OnInit {
     this.confirmationModalOpen = false;
   }
   
-  // Méthodes de formatage
   formatDate(dateString: string): string {
     if (!dateString) return '';
     
@@ -394,11 +383,9 @@ export class ArticleContentComponent implements OnInit {
     return text.substring(0, maxLength) + '...';
   }
   
-  // Méthodes de filtrage et pagination
   applyFilters(): void {
     let result = [...this.articles];
     
-    // Filtrer par recherche
     if (this.searchQuery) {
       const query = this.searchQuery.toLowerCase();
       result = result.filter(article => 
@@ -408,17 +395,14 @@ export class ArticleContentComponent implements OnInit {
       );
     }
     
-    // Filtrer par catégorie
     if (this.categoryFilter !== null) {
       result = result.filter(article => article.category?.id === this.categoryFilter);
     }
     
-    // Filtrer par statut (publié/brouillon)
     if (this.statusFilter !== null) {
       result = result.filter(article => article.published === this.statusFilter);
     }
     
-    // Filtrer par date
     if (this.dateFilter) {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -448,18 +432,15 @@ export class ArticleContentComponent implements OnInit {
       });
     }
     
-    // Mettre à jour les articles filtrés et la pagination
     this.filteredArticles = result;
     this.totalPages = Math.ceil(this.filteredArticles.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
     }
     
-    // Calculer les articles à afficher basés sur la pagination actuelle
     this.updateDisplayedArticles();
   }
   
-  // Nouvelle méthode pour mettre à jour les articles affichés
   updateDisplayedArticles(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     this.displayedArticles = this.filteredArticles.slice(startIndex, startIndex + this.itemsPerPage);

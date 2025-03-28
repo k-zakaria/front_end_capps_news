@@ -30,20 +30,17 @@ export class CardsHomeComponent {
     this.loading = true;
     this.articleService.getAllArticles().subscribe({
       next: (articles) => {
-        // Filtrer uniquement les articles publiés
         const publishedArticles = articles.filter(article => article.published);
         
-        // Trier par date de publication (du plus récent au plus ancien)
         const sortedArticles = publishedArticles.sort((a, b) => {
           const dateA = new Date(a.publicationDate || 0);
           const dateB = new Date(b.publicationDate || 0);
           return dateB.getTime() - dateA.getTime();
         });
         
-        // Répartir les articles dans différentes sections
-        this.featuredArticles = sortedArticles.slice(0, 2); // Les 2 premiers pour la section en vedette
-        this.secondaryArticles = sortedArticles.slice(2, 5); // Les 3 suivants pour la grille
-        this.otherArticles = sortedArticles.slice(5, 7); // Les 2 derniers pour la section du bas
+        this.featuredArticles = sortedArticles.slice(1, 3); 
+        this.secondaryArticles = sortedArticles.slice(3, 6); 
+        this.otherArticles = sortedArticles.slice(6, 8);
         
         this.loading = false;
       },

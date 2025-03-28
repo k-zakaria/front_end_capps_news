@@ -33,7 +33,7 @@ export const routes: Routes = [
             {
                 path: 'articles',
                 component: ArticleComponent,
-                canActivate: [authGuard ],
+                canActivate: [authGuard, adminGuard],
             },
             {
                 path: 'categories',

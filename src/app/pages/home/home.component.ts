@@ -5,11 +5,12 @@ import { ArticleResVM } from '../../model/article-res-vm';
 import { ArticleService } from '../../services/article.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { FooterComponent } from "../../components/footer/footer.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CardsHomeComponent, LastCardsComponent, CommonModule],
+  imports: [CardsHomeComponent, LastCardsComponent, CommonModule, FooterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -46,21 +47,17 @@ export class HomeComponent implements OnInit {
   fetchArticlesByCategories(): void {
     this.loading = true;
     
-    // Récupérer les derniers articles (sans filtrage par catégorie)
     this.articleService.getAllArticles().subscribe({
       next: (articles) => {
-        // Filtrer uniquement les articles publiés
         const publishedArticles = articles.filter(article => article.published);
         
-        // Trier par date de publication (du plus récent au plus ancien)
         this.articles = publishedArticles.sort((a, b) => {
           const dateA = new Date(a.publicationDate || '');
           const dateB = new Date(b.publicationDate || '');
           return dateB.getTime() - dateA.getTime();
         });
 
-        // Extraire les articles pour chaque section
-        this.featuredArticles = this.articles.slice(1, 2); // Second article
+        this.featuredArticles = this.articles.slice(1, 2); 
         this.newsArticles = this.articles.filter(a => a.category?.name === 'News').slice(0, 1);
         this.politicsArticles = this.articles.filter(a => a.category?.name === 'Politics').slice(0, 1);
         this.businessArticles = this.articles.filter(a => a.category?.name === 'Business').slice(0, 1);

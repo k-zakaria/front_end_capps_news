@@ -14,6 +14,7 @@ export class LastCardsComponent implements OnInit {
   articles: ArticleResVM[] = [];
   latestArticle: ArticleResVM | null = null;
   loading = true;
+  readonly maxArticles = 20;
 
   constructor(private articleService: ArticleService, private router: Router,) { }
 
@@ -23,9 +24,9 @@ export class LastCardsComponent implements OnInit {
 
 
   fetchAllArticles(): void {
-    this.articleService.getAllArticles().subscribe({
-      next: (articles) => {
-        this.articles = articles.filter(article => article.published);
+    this.articleService.getPaginatedArticles(0, this.maxArticles).subscribe({
+      next: (response) => {
+        this.articles = response.content.filter(article => article.published);
         this.loading = false;
       },
       error: (err) => {
@@ -35,7 +36,7 @@ export class LastCardsComponent implements OnInit {
     });
   }
 
-  navigateToArticleDetail(articleId: string): void {
-    this.router.navigate(['/vesitor/article', articleId]);
+  navigateToArticle(articleId: string): void {
+    this.router.navigate(['/article', articleId]);
   }
 }

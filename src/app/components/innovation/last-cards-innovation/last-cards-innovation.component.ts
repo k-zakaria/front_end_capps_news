@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ArticleService } from '../../../services/article.service';
 import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
 import { CommonModule } from '@angular/common';
+import { filter } from 'lodash';
 
 @Component({
   selector: 'app-last-cards-innovation',

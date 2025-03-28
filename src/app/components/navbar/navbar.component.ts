@@ -46,7 +46,16 @@ export class NavbarComponent {
   }
 
   goToDashboard() {
-    this.router.navigate(['/dashboard/articles']);
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      if (currentUser.role === 'ADMIN') {
+        this.router.navigate(['/dashboard/articles']);
+      } else if (currentUser.role === 'AUTHOR') {
+        this.router.navigate(['/dashboard/author/articles']);
+      } else {
+        this.router.navigate(['/']);
+      }
+    }
     this.isDropdownOpen = false;
   }
 

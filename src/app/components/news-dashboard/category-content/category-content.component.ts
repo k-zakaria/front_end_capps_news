@@ -14,12 +14,12 @@ import { CategoryFormData, CategoryResVM } from '../../../model/category-res-vm'
 export class CategoryContentComponent implements OnInit{
   categories: CategoryResVM[] = [];
   filteredCategories: CategoryResVM[] = [];
-  displayedCategories: CategoryResVM[] = []; // Catégories affichées après pagination
+  displayedCategories: CategoryResVM[] = [];
   
-  // Pagination
-  itemsPerPage = 5;  // Nombre d'items par page
-  currentPage = 1;   // Page actuelle
-  totalPages = 1;    // Nombre total de pages
+ 
+  itemsPerPage = 5;  
+  currentPage = 1;   
+  totalPages = 1;    
   
   loading = true;
   isModalOpen = false;
@@ -45,7 +45,7 @@ export class CategoryContentComponent implements OnInit{
     this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
         this.categories = categories;
-        this.filteredCategories = categories; // Pour l'instant, pas de filtrage
+        this.filteredCategories = categories; 
         this.updatePagination();
         this.loading = false;
       },
@@ -57,7 +57,6 @@ export class CategoryContentComponent implements OnInit{
     });
   }
   
-  // Méthode pour mettre à jour la pagination
   updatePagination(): void {
     this.totalPages = Math.ceil(this.filteredCategories.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
@@ -66,13 +65,11 @@ export class CategoryContentComponent implements OnInit{
     this.updateDisplayedCategories();
   }
 
-  // Méthode pour mettre à jour les catégories affichées
   updateDisplayedCategories(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     this.displayedCategories = this.filteredCategories.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
-  // Méthode pour aller à une page spécifique
   goToPage(page: number | string): void {
     if (page === '...') return;
     
@@ -83,28 +80,21 @@ export class CategoryContentComponent implements OnInit{
     }
   }
 
-  // Générer le tableau des pages à afficher
   getPagesArray(): (number | string)[] {
     const pages: (number | string)[] = [];
     
     if (this.totalPages <= 7) {
-      // Afficher toutes les pages si moins de 7 pages
       for (let i = 1; i <= this.totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Toujours afficher la première page
       pages.push(1);
       
-      // Afficher des points de suspension ou les pages autour de la page actuelle
       if (this.currentPage <= 3) {
-        // Près du début
         pages.push(2, 3, 4, 5, '...', this.totalPages);
       } else if (this.currentPage >= this.totalPages - 2) {
-        // Près de la fin
         pages.push('...', this.totalPages - 4, this.totalPages - 3, this.totalPages - 2, this.totalPages - 1, this.totalPages);
       } else {
-        // Au milieu
         pages.push('...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', this.totalPages);
       }
     }
@@ -163,7 +153,6 @@ export class CategoryContentComponent implements OnInit{
         this.successMessage = 'Category created successfully!';
         this.loading = false;
         
-        // Fermer la modale après un délai
         setTimeout(() => {
           this.closeModal();
         }, 1500);
@@ -184,7 +173,6 @@ export class CategoryContentComponent implements OnInit{
     
     this.categoryService.updateCategory(this.selectedCategoryId, this.categoryForm).subscribe({
       next: (updatedCategory) => {
-        // Mettre à jour la catégorie dans le tableau local
         const index = this.categories.findIndex(c => c.id === this.selectedCategoryId);
         if (index !== -1) {
           this.categories[index] = updatedCategory;
@@ -195,7 +183,6 @@ export class CategoryContentComponent implements OnInit{
         this.successMessage = 'Category updated successfully!';
         this.loading = false;
         
-        // Fermer la modale après un délai
         setTimeout(() => {
           this.closeModal();
         }, 1500);
@@ -214,7 +201,6 @@ export class CategoryContentComponent implements OnInit{
       
       this.categoryService.deleteCategory(categoryId).subscribe({
         next: () => {
-          // Supprimer la catégorie du tableau local
           this.categories = this.categories.filter(c => c.id !== categoryId);
           this.filteredCategories = this.categories;
           this.updatePagination();

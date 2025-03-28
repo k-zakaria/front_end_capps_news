@@ -5,16 +5,19 @@
             <div class="grid grid-cols-4 gap-4">
                 <div *ngFor="let article of articles"
                     class="hover:opacity-95 transition-all duration-200 transform hover:-translate-y-1">
-                    <img [src]="article.image || 'https://via.placeholder.com/300'" alt="{{ article.title }}"
-                        class="w-full h-32 object-cover mb-2" />
-                    <h3 class="font-bold hover:text-blue-700 transition-colors duration-200 cursor-pointer">
-                        {{ article.title }}
-                    </h3>
-                    <p class="text-xs my-2 text-gray-700">
-                        {{ (article.content || '').slice(0, 100) }}...
-                    </p>
-                    <div class="flex items-center text-xs text-gray-500 mt-1">
-                        <span>1 day ago</span> <span class="mx-2">|</span> <span>US &amp; Canada</span>
+                    <div class="w-1/2 flex flex-col space-y-2 group cursor-pointer"
+                        (click)="navigateToArticle(article.id)">
+                        <img [src]="article.image || 'https://via.placeholder.com/300'" alt="{{ article.title }}"
+                            class="w-full h-32 object-cover mb-2" />
+                        <h3 class="font-bold hover:text-blue-700 transition-colors duration-200 cursor-pointer">
+                            {{ article.title }}
+                        </h3>
+                        <p class="text-xs my-2 text-gray-700">
+                            {{ (article.content || '').slice(0, 100) }}...
+                        </p>
+                        <div class="flex items-center text-xs text-gray-500 mt-1">
+                            <span>1 day ago</span> <span class="mx-2">|</span> <span>US &amp; Canada</span>
+                        </div>
                     </div>
                 </div>
             </div>

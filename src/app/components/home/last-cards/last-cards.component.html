@@ -4,7 +4,7 @@
             <div class="grid grid-cols-4 gap-4">
                 <div *ngFor="let article of articles"
                     class="hover:opacity-95 transition-all duration-200 transform hover:-translate-y-1">
-                    <div class="article-card cursor-pointer" (click)="navigateToArticleDetail(article.id)">
+                    <div class="article-card cursor-pointer" (click)="navigateToArticle(article.id)">
                         <img [src]="article.image || 'https://via.placeholder.com/300'" alt="{{ article.title }}"
                             class="w-full h-32 object-cover mb-2" />
                         <h3 class="font-bold hover:text-blue-700 transition-colors duration-200 cursor-pointer">

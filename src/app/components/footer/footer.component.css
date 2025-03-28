@@ -1,0 +1,27 @@
+/* Vous pouvez ajouter des styles spécifiques supplémentaires ici si nécessaire */
+
+.footer-link {
+  position: relative;
+}
+
+.footer-link:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.footer-link:hover:after {
+  width: 100%;
+}
+
+/* Style pour mobile */
+@media (max-width: 768px) {
+  .footer-section {
+    margin-bottom: 2rem;
+  }
+}

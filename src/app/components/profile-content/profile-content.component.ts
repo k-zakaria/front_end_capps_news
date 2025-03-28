@@ -4,18 +4,28 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+export interface AuthUser {
+  id: number;
+  username: string;
+  role: string;
+  email?: string; 
+  permission: string[];
+}
+
 @Component({
   selector: 'app-profile-content',
+  standalone: true, 
   imports: [
     CommonModule, 
-    FormsModule,  // Make sure FormsModule is imported
+    FormsModule,
     RouterModule
   ],
   templateUrl: './profile-content.component.html',
   styleUrl: './profile-content.component.css'
 })
 export class ProfileContentComponent implements OnInit {
-  // Profile form data
+  private authService = inject(AuthService);
+  
   profileForm = {
     username: '',
     email: '',
@@ -24,66 +34,59 @@ export class ProfileContentComponent implements OnInit {
     bio: ''
   };
 
-  // Password form data
   passwordForm = {
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   };
 
-  // Active tab
   activeTab: 'profile' | 'security' | 'preferences' = 'profile';
 
-  constructor() {}
-
   ngOnInit(): void {
-    // Initialize form data
-    this.initializeProfileForm();
+    this.loadUserData();
   }
 
-  // Initialize profile form
-  initializeProfileForm() {
-    // Here you would typically load user data from a service
-    this.profileForm = {
-      username: 'johndoe',
-      email: 'john.doe@example.com',
-      firstName: 'John',
-      lastName: 'Doe',
-      bio: ''
-    };
+  loadUserData() {
+    const currentUser = this.authService.getCurrentUser();
+    
+    if (currentUser) {
+      this.profileForm = {
+        username: currentUser.username || '',
+        email: currentUser.email || '', 
+        firstName: '', 
+        lastName: '',
+        bio: ''
+      };
+      
+      console.log('Loaded user data:', this.profileForm);
+    } else {
+      console.warn('No authenticated user found');
+    }
   }
 
-  // Change active tab
   setActiveTab(tab: 'profile' | 'security' | 'preferences') {
     this.activeTab = tab;
   }
 
-  // Save profile
   saveProfile() {
     console.log('Saving profile', this.profileForm);
-    // Implement profile save logic
   }
 
-  // Change password
   changePassword() {
-    // Validate password
     if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
       console.error('Passwords do not match');
       return;
     }
 
     console.log('Changing password', this.passwordForm);
-    // Implement password change logic
   }
 
-  // Get user initials (placeholder)
   getUserInitials(): string {
-    const username = this.profileForm.username;
-    return username 
-      ? username.split(' ')
-          .map(word => word.charAt(0).toUpperCase())
-          .slice(0, 2)
-          .join('')
-      : '';
+    if (this.profileForm.firstName && this.profileForm.lastName) {
+      return (this.profileForm.firstName.charAt(0) + this.profileForm.lastName.charAt(0)).toUpperCase();
+    } else if (this.profileForm.username) {
+      return this.profileForm.username.charAt(0).toUpperCase();
+    }
+    return '?';
   }
 }

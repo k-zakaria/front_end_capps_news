@@ -67,6 +67,7 @@ export class AuthService {
         id: payload.id || 0,
         username: payload.username || payload.sub || '',
         role: payload.role || '',
+        email:payload.email || '',
         permission: Array.isArray(payload.permissions) 
           ? payload.permissions.map((p: any) => p.authority)
           : []
@@ -112,7 +113,6 @@ export class AuthService {
     );
   }
 
-  // Updated to match backend response structure
   register(username: string, email: string, password: string): Observable<any> {
     return this.http.post<any>(this.registerUrl, { username, email, password }).pipe(
       tap((res) => {

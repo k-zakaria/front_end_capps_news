@@ -84,7 +84,7 @@ export class AuthorArticlesComponent implements OnInit {
     this.articleService.getArticlesByAuthor(username).subscribe({
       next: (articles) => {
         this.articles = articles;
-        this.filteredArticles = articles; // Pour l'instant, on n'applique pas de filtres
+        this.filteredArticles = articles; 
         this.updatePagination();
         this.loading = false;
       },
@@ -96,7 +96,6 @@ export class AuthorArticlesComponent implements OnInit {
     });
   }
 
-  // Méthode pour mettre à jour la pagination
   updatePagination(): void {
     this.totalPages = Math.ceil(this.filteredArticles.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
@@ -105,13 +104,11 @@ export class AuthorArticlesComponent implements OnInit {
     this.updateDisplayedArticles();
   }
 
-  // Méthode pour mettre à jour les articles affichés
   updateDisplayedArticles(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     this.displayedArticles = this.filteredArticles.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
-  // Méthode pour aller à une page spécifique
   goToPage(page: number | string): void {
     if (page === '...') return;
     
@@ -122,28 +119,21 @@ export class AuthorArticlesComponent implements OnInit {
     }
   }
 
-  // Générer le tableau des pages à afficher
   getPagesArray(): (number | string)[] {
     const pages: (number | string)[] = [];
     
     if (this.totalPages <= 7) {
-      // Afficher toutes les pages si moins de 7 pages
       for (let i = 1; i <= this.totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Toujours afficher la première page
       pages.push(1);
       
-      // Afficher des points de suspension ou les pages autour de la page actuelle
       if (this.currentPage <= 3) {
-        // Près du début
         pages.push(2, 3, 4, 5, '...', this.totalPages);
       } else if (this.currentPage >= this.totalPages - 2) {
-        // Près de la fin
         pages.push('...', this.totalPages - 4, this.totalPages - 3, this.totalPages - 2, this.totalPages - 1, this.totalPages);
       } else {
-        // Au milieu
         pages.push('...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', this.totalPages);
       }
     }
@@ -206,7 +196,6 @@ export class AuthorArticlesComponent implements OnInit {
     this.editMode = true;
     this.isModalOpen = true;
 
-    // Prévisualization de l'image si disponible
     if (article.image) {
       this.imagePreview = article.image;
     }
@@ -238,7 +227,6 @@ export class AuthorArticlesComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
 
-      // Créer une URL pour prévisualiser l'image
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
@@ -278,8 +266,8 @@ export class AuthorArticlesComponent implements OnInit {
     this.articleService.createArticle(this.articleForm, this.selectedFile).subscribe({
       next: (newArticle) => {
         this.articles.push(newArticle);
-        this.filteredArticles = this.articles; // Mise à jour des articles filtrés
-        this.updatePagination(); // Mettre à jour la pagination
+        this.filteredArticles = this.articles; 
+        this.updatePagination();
         this.successMessage = 'Article created successfully!';
         this.loading = false;
 
@@ -307,8 +295,8 @@ export class AuthorArticlesComponent implements OnInit {
         if (index !== -1) {
           this.articles[index] = updatedArticle;
         }
-        this.filteredArticles = this.articles; // Mise à jour des articles filtrés
-        this.updatePagination(); // Mettre à jour la pagination
+        this.filteredArticles = this.articles; 
+        this.updatePagination(); 
         this.successMessage = 'Article updated successfully!';
         this.loading = false;
 
@@ -340,8 +328,8 @@ export class AuthorArticlesComponent implements OnInit {
     this.articleService.deleteArticle(articleId).subscribe({
       next: () => {
         this.articles = this.articles.filter(article => article.id !== articleId);
-        this.filteredArticles = this.articles; // Mise à jour des articles filtrés
-        this.updatePagination(); // Mettre à jour la pagination
+        this.filteredArticles = this.articles; 
+        this.updatePagination(); 
         this.loading = false;
       },
       error: (err) => {

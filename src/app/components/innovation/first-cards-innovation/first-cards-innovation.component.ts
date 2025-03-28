@@ -30,20 +30,17 @@ export class FirstCardsInnovationComponent implements OnInit {
     this.articleService.getArticlesByCategoryId(categoryId).subscribe({
       next: (articles) => {
         const publishedArticles = articles.filter(article => article.published);
-        // Tri par date de publication (du plus récent au plus ancien)
         const sortedArticles = publishedArticles.sort((a, b) => {
           return new Date(b.publicationDate || '').getTime() - new Date(a.publicationDate || '').getTime();
         });
         
-        // Sélectionner l'article en vedette (le plus long ou le plus récent)
         this.featuredArticle = sortedArticles.find(article => 
           article.content && article.content.length > 500
         ) || sortedArticles[0];
         
-        // Filtrer l'article en vedette des autres articles
         this.cultureArticles = sortedArticles.filter(article => 
           article.id !== this.featuredArticle?.id
-        ).slice(0, 4); // Prendre les 4 premiers autres articles
+        ).slice(0, 4);
         
         this.loading = false;
       },

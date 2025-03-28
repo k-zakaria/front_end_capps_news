@@ -48,7 +48,7 @@ export class LoginComponent {
         
         // Add a small delay before redirecting (optional but can help)
         setTimeout(() => {
-          this.router.navigate(['/dashboard/articles'])
+          this.router.navigate(['/'])
             .then(success => console.log('Navigation result:', success))
             .catch(error => console.error('Navigation error:', error));
         }, 100);
